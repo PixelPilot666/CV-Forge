@@ -12,9 +12,9 @@ meta:
   updated: 2026-06-23       # 最后更新日期（字符串）
 
 basics:                     # 必填
-  name: 刘兴宇              # 必填
-  phone: "185-0641-5283"    # 必填（字符串，保留前导/分隔符）
-  email: xingyu_liu2002@163.com   # 必填
+  name: 李明                # 必填
+  phone: "138-0000-0000"    # 必填（字符串，保留前导/分隔符）
+  email: liming@example.com # 必填
   photo: true               # 可选，是否在简历显示照片，默认 false
   photo_size: 0.12          # 可选，照片宽度占纸宽比例
   headline: 后端/Agent 工程师   # 可选，一句话定位
@@ -28,22 +28,22 @@ skills:                     # 可选但强烈建议；用于 JD 匹配
       - name: Python
         level: proficient   # 可选: exposure|familiar|proficient|expert
         years: 4            # 可选
-        evidence_refs: [exp-xinao]   # 可选，软提醒：指向证明它的条目 id
+        evidence_refs: [exp-acme]   # 可选，软提醒：指向证明它的条目 id
       - name: Go
   - group: 框架与工具
     items:
       - name: LangChain
-        evidence_refs: [exp-xinao, proj-course-agent]
+        evidence_refs: [exp-acme, proj-course-agent]
 
 experience:                 # 实习/工作经历
-  - id: exp-xinao           # 必填，稳定 id（裁剪只引用、不新增）
-    org: 新奥新智科技有限公司   # 必填，单位
+  - id: exp-acme           # 必填，稳定 id（裁剪只引用、不新增）
+    org: 某科技有限公司   # 必填，单位
     title: Agent 工程师       # 必填，职位
     date: "2025.01 - 2026.01" # 必填，时间段（字符串，保留原格式）
     tech: [LangChain, FastAPI, FAISS]   # 可选，技术栈
     tags: [RAG, 检索, 微调]   # 可选，语义标签，用于 JD 匹配
     bullets:
-      - id: exp-xinao-b1     # 必填，稳定 id
+      - id: exp-acme-b1     # 必填，稳定 id
         text: 构建端到端旅行套餐生成系统……   # 必填，要点文本（纯文本，自动 LaTeX 转义）
         metrics:             # 可选，结构化真实指标（补强=复用这些数字，不可编造）
           latency_s: 42
@@ -54,7 +54,7 @@ projects:                   # 项目经历，结构同 experience
     name: 多Agent选课推荐系统   # 项目名（projects 用 name 而非 org/title）
     role: 独立项目            # 可选
     date: ""                 # 可选
-    url: https://github.com/PixelPilot666/course-recommend-agent  # 可选
+    url: https://github.com/example/course-recommend-agent  # 可选
     tech: [FastAPI, LangGraph, Milvus]
     tags: [Multi-Agent, RAG]
     bullets:
@@ -72,13 +72,13 @@ research:                   # 科研/论文，结构同上
         text: 提出了分辨率偏置的不确定性估计……
 
 education:                  # 教育经历
-  - id: edu-nankai          # 必填，稳定 id
-    school: 南开大学（985、211、双一流）   # 必填
+  - id: edu-grad          # 必填，稳定 id
+    school: 某重点大学（985）   # 必填
     degree: 硕士（保研）       # 可选
     field: 计算机技术          # 可选
     date: "2024.09 - 2027.06" # 必填
     bullets:                 # 可选（导师、荣誉等）
-      - id: edu-nankai-b1
+      - id: edu-grad-b1
         text: "导师：……"
 
 awards: []                  # 可选，独立奖项（也可并入 education bullets）
@@ -95,7 +95,7 @@ preferences:                # 可选，不打印，仅指导裁剪
 - 顶层含 `basics`；`basics.name` / `basics.phone` / `basics.email` 三者非空。
 - `experience` / `projects` / `research` / `education` 若存在，必须是列表；每个条目含**非空 `id`**。
 - 同类下 `id` 唯一；所有 bullet 的 `id` 在全局唯一。
-- 经历类条目含必填定位字段：`experience` 需 `org`+`title`+`date`；`projects`/`research` 需 `name`；`education` 需 `school`+`date`。
+- 经历类条目含必填定位字段：`experience` 需 `org`+`date`（`title` 推荐）；`projects`/`research` 需 `name`；`education` 需 `school`+`date`。
 
 **软提醒（不报错，仅列出 warning）：**
 - 某 `skills.items[].name` 没有 `evidence_refs` → 提醒"此技能未关联证据，请确认属实"。

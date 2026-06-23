@@ -13,19 +13,19 @@ SAMPLE_TEX = r"""
 \documentclass{resume}
 \usepackage{zh_CN-Adobefonts_external}
 \begin{document}
-\name{刘兴宇}
-\contactInfo{185-0641-5283}{xingyu\_liu2002@163.com}
+\name{李明}
+\contactInfo{138-0000-0000}{liming\_demo@example.com}
 \yourphoto{0.12}
 
 \section{教育经历}
-\datedsubsection{\textbf{南开大学（985、211、双一流）}，计算机技术，\textit{硕士（保研）}}{2024.09 - 2027.06}
+\datedsubsection{\textbf{某重点大学（985）}，计算机技术，\textit{硕士}}{2024.09 - 2027.06}
 \begin{itemize} [parsep=1ex]
-    \item \textbf{导师}：天津市重点实验室 \href{https://cv.nankai.edu.cn/}{杨巨峰}
-  \item \textbf{荣誉奖项}：公能一等奖学金
+    \item \textbf{导师}：某重点实验室 \href{https://example.edu/}{某教授}
+  \item \textbf{荣誉奖项}：一等奖学金
 \end{itemize}
 
 \section{实习经历}
-\datedsubsection{\textbf{Agent 工程师} \hfill \textbf{新奥新智科技有限公司}}{2025.01 - 2026.01}
+\datedsubsection{\textbf{Agent 工程师} \hfill \textbf{某科技有限公司}}{2025.01 - 2026.01}
 \begin{itemize}[parsep=0.5ex]
     \item \textbf{技术栈}：LangChain · FastAPI · FAISS
     \item 构建端到端旅行套餐生成系统，P@1 从 86.7\% 提升至 96.7\%
@@ -54,10 +54,10 @@ class TestExtractProfile(unittest.TestCase):
 
     def test_basics_extracted(self):
         b = self.p["basics"]
-        self.assertEqual(b["name"], "刘兴宇")
-        self.assertEqual(b["phone"], "185-0641-5283")
+        self.assertEqual(b["name"], "李明")
+        self.assertEqual(b["phone"], "138-0000-0000")
         # underscore unescaped back to plain text
-        self.assertEqual(b["email"], "xingyu_liu2002@163.com")
+        self.assertEqual(b["email"], "liming_demo@example.com")
         self.assertTrue(b.get("photo"))
 
     def test_sections_extracted_in_order(self):
