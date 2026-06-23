@@ -46,13 +46,21 @@ class TestWorkflowWiring(unittest.TestCase):
     def test_references_the_pipeline_scripts(self):
         text = _read()
         for script in ("extract_profile.py", "validate_profile.py", "fill_template.py",
-                       "detect_engine.sh", "render_pdf.sh", "ats_check.py"):
+                       "detect_engine.sh", "render_pdf.sh", "ats_check.py",
+                       "check_fidelity.py"):
             self.assertIn(script, text, f"SKILL.md should reference {script}")
 
     def test_references_the_guard_docs(self):
         text = _read()
-        for doc in ("tailoring-rules", "profile-schema"):
+        for doc in ("tailoring-rules", "profile-schema", "resume-craft",
+                    "review-rubric", "interview"):
             self.assertIn(doc, text, f"SKILL.md should point to references/{doc}.md")
+
+    def test_states_whole_page_and_verbatim_rules(self):
+        text = _read()
+        self.assertTrue("整页" in text or "一页" in text, "must mention whole-page discipline")
+        self.assertTrue("原样" in text or "verbatim" in text or "一字不差" in text,
+                        "must mention verbatim preservation of key fields")
 
     def test_states_truthfulness_boundary(self):
         text = _read()
