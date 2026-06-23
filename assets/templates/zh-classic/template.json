@@ -1,0 +1,31 @@
+{
+  "id": "zh-classic",
+  "name": "中文经典单栏简历",
+  "description": "基于 xeCJK 的中文单栏简历模板，字体内置可移植，右上角可选照片。ATS 友好（单栏、纯文本、无内容表格）。",
+  "lang": "zh",
+  "engine": "xelatex",
+  "engine_compatible": ["tectonic", "xelatex"],
+  "ats_safe": true,
+  "columns": 1,
+  "entry_file": "resume.tex.tmpl",
+  "requires_files": [
+    "resume.cls",
+    "fontawesome.sty",
+    "linespacing_fix.sty",
+    "zh_CN-Adobefonts_external.sty",
+    "fonts/",
+    "images/placeholder.jpg"
+  ],
+  "placeholders": {
+    "name": "姓名（标量）",
+    "phone": "手机号（标量）",
+    "email": "邮箱（标量）",
+    "photo": "是否显示照片（条件，true/false）",
+    "photo_size": "照片宽度占纸宽比例，如 0.12（标量）",
+    "sections": "章节列表；每个含 title 和 entries",
+    "sections[].entries": "条目列表；每个含 heading、date、bullets",
+    "sections[].entries[].bullets": "要点列表；每个含 text"
+  },
+  "source": "用户提供的中文简历模板 myCV__agent_（基于经典 xeCJK résumé class）",
+  "license_note": "模板源自用户提供；fontawesome 为 OFL，texgyretermes 为 GUST Font License，Adobe 中文字体随模板分发。再分发前请核对各字体许可证。"
+}

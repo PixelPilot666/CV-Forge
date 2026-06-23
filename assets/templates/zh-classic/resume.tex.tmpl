@@ -1,0 +1,27 @@
+\documentclass{resume}
+\usepackage{zh_CN-Adobefonts_external}
+\usepackage{linespacing_fix}
+\usepackage{cite}
+\usepackage[colorlinks=true, urlcolor=blue]{hyperref}
+\begin{document}
+\pagenumbering{gobble}
+
+%********************************** 姓名 ********************************************
+\name{{{name}}}
+%********************************** 联系信息 ****************************************
+\contactInfo{{{phone}}}{{{email}}}
+
+%********************************** 照片（可选） ************************************
+{{#if photo}}\yourphoto{{{photo_size}}}{{/if}}
+
+%********************************** 正文 ********************************************
+{{#sections}}
+\section{{{title}}}
+{{#entries}}
+\datedsubsection{{{heading}}}{{{date}}}
+{{#if bullets}}\begin{itemize}[parsep=0.5ex]
+{{#bullets}}    \item {{text}}
+{{/bullets}}\end{itemize}{{/if}}
+{{/entries}}
+{{/sections}}
+\end{document}
