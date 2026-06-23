@@ -138,5 +138,47 @@ class TestIntegration(unittest.TestCase):
         self.assertIn(r"96.7\%", out)          # bullet text escaped
 
 
+class TestBuildContextTechLine(unittest.TestCase):
+    """auto tech_line must not duplicate a tech-stack bullet the tailor already wrote."""
+
+    def _profile(self):
+        return {
+            "basics": {"name": "李明", "phone": "1", "email": "a@b.com"},
+            "experience": [
+                {"id": "e1", "org": "X", "title": "T", "date": "2025",
+                 "tech": ["Python", "Qdrant"],
+                 "bullets": [{"id": "e1-b1", "text": "技术栈：Python · Qdrant"},
+                             {"id": "e1-b2", "text": "做了某事"}]},
+            ],
+        }
+
+    def test_no_duplicate_when_bullet_has_tech_stack(self):
+        # tailor selects a bullet whose text is itself a 技术栈 line
+        tailor = {"sections": [{"title": "实习经历", "entries": [
+            {"ref": "e1", "heading": "T", "date": "2025",
+             "bullet_ids": ["e1-b1", "e1-b2"]}]}]}
+        ctx = ft.build_context(self._profile(), tailor)
+        entry = ctx["sections"][0]["entries"][0]
+        # auto tech_line should be suppressed because a bullet already carries 技术栈
+        self.assertEqual(entry["tech_line"], "",
+                         "auto tech_line duplicated a tech-stack bullet")
+
+    def test_auto_tech_line_when_no_tech_bullet(self):
+        tailor = {"sections": [{"title": "实习经历", "entries": [
+            {"ref": "e1", "heading": "T", "date": "2025",
+             "bullet_ids": ["e1-b2"]}]}]}
+        ctx = ft.build_context(self._profile(), tailor)
+        entry = ctx["sections"][0]["entries"][0]
+        self.assertIn("技术栈", entry["tech_line"])
+        self.assertIn("Python", entry["tech_line"])
+
+    def test_explicit_show_tech_false_suppresses(self):
+        tailor = {"sections": [{"title": "实习经历", "entries": [
+            {"ref": "e1", "heading": "T", "date": "2025",
+             "show_tech": False, "bullet_ids": ["e1-b2"]}]}]}
+        ctx = ft.build_context(self._profile(), tailor)
+        self.assertEqual(ctx["sections"][0]["entries"][0]["tech_line"], "")
+
+
 if __name__ == "__main__":
     unittest.main()

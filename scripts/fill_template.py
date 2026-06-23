@@ -230,9 +230,11 @@ def build_context(profile, tailor):
                 text = overrides.get(bid, bullet_text.get(bid, ""))
                 if text:
                     bullets.append({"text": text})
-            # 技术栈行: 优先用 tailor 显式给的 tech_line, 否则从 profile 的 tech 拼装
+            # 技术栈行: 优先用 tailor 显式给的 tech_line, 否则从 profile 的 tech 拼装。
+            # 防重复: 若选中的 bullet 自身已是「技术栈」行, 则不再自动生成, 避免出现两行。
             tech_line = e.get("tech_line", "")
-            if not tech_line and e.get("show_tech", True):
+            bullet_has_tech = any(b["text"].lstrip().startswith("技术栈") for b in bullets)
+            if not tech_line and not bullet_has_tech and e.get("show_tech", True):
                 tech = entry_tech.get(e.get("ref"), [])
                 if tech:
                     # tech 项是纯文本, 逐个转义后用 LaTeX 的 \textbf 标签包住"技术栈"
