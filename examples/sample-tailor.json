@@ -1,0 +1,16 @@
+{
+  "sections": [
+    {"title": "教育经历", "entries": [
+      {"ref": "edu-grad", "heading": "\\textbf{某重点大学（985）}，计算机技术，\\textit{硕士}", "date": "2024.09 - 2027.06",
+       "bullet_ids": ["edu-grad-b1", "edu-grad-b2"]}
+    ]},
+    {"title": "实习经历", "entries": [
+      {"ref": "expe-rag", "heading": "\\textbf{Agent 工程师} \\hfill \\textbf{某科技有限公司}", "date": "2025.01 - 2026.01",
+       "bullet_ids": ["expe-rag-b1", "expe-rag-b3"]}
+    ]},
+    {"title": "项目经历", "entries": [
+      {"ref": "proj-course-agent", "heading": "\\textbf{多 Agent 选课推荐系统}（独立项目）", "date": "",
+       "bullet_ids": ["proj-course-agent-b1", "proj-course-agent-b2"]}
+    ]}
+  ]
+}
