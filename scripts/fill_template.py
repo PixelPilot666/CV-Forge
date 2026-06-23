@@ -18,7 +18,7 @@ import re
 import sys
 
 # 默认按"已格式化 LaTeX 片段"处理、不转义的字段(由编排层拼装好排版)
-DEFAULT_RAW_KEYS = {"heading", "date", "title", "photo_size", "tech_line"}
+DEFAULT_RAW_KEYS = {"heading", "date", "title", "photo_size", "tech_line", "intro"}
 # 这些字段转义后还支持 **粗体** 标记(bullet 正文安全加粗)
 DEFAULT_BOLD_KEYS = {"text"}
 
@@ -240,9 +240,13 @@ def build_context(profile, tailor):
                     # tech 项是纯文本, 逐个转义后用 LaTeX 的 \textbf 标签包住"技术栈"
                     items = " · ".join(latex_escape(t) for t in tech)
                     tech_line = r"\textbf{技术栈}：" + items
+            # 项目简介: 一段专业文字, 放在项目名正下方; 支持 **加粗**, 自动转义
+            intro_raw = e.get("intro", "")
+            intro = escape_with_bold(intro_raw) if intro_raw else ""
             entries.append({
                 "heading": e.get("heading", ""),
                 "date": e.get("date", ""),
+                "intro": intro,
                 "tech_line": tech_line,
                 "bullets": bullets,
                 "has_items": bool(tech_line or bullets),

@@ -179,6 +179,21 @@ class TestBuildContextTechLine(unittest.TestCase):
         ctx = ft.build_context(self._profile(), tailor)
         self.assertEqual(ctx["sections"][0]["entries"][0]["tech_line"], "")
 
+    def test_intro_passed_through_and_escaped_with_bold(self):
+        tailor = {"sections": [{"title": "项目经历", "entries": [
+            {"ref": "e1", "heading": "T", "date": "",
+             "intro": "独立构建 **选课推荐系统**，覆盖率 95%", "bullet_ids": ["e1-b2"]}]}]}
+        ctx = ft.build_context(self._profile(), tailor)
+        entry = ctx["sections"][0]["entries"][0]
+        self.assertEqual(entry["intro"], r"独立构建 \textbf{选课推荐系统}，覆盖率 95\%")
+        self.assertTrue(entry["has_items"])  # intro counts as content
+
+    def test_no_intro_is_empty(self):
+        tailor = {"sections": [{"title": "x", "entries": [
+            {"ref": "e1", "heading": "T", "date": "", "bullet_ids": ["e1-b2"]}]}]}
+        ctx = ft.build_context(self._profile(), tailor)
+        self.assertEqual(ctx["sections"][0]["entries"][0].get("intro", ""), "")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -19,7 +19,8 @@
 \section{{{title}}}
 {{#entries}}
 \datedsubsection{{{heading}}}{{{date}}}
-{{#if has_items}}\begin{itemize}[parsep=0.5ex]
+{{#if intro}}{{intro}}
+{{/if}}{{#if has_items}}\begin{itemize}[parsep=0.5ex]
 {{#if tech_line}}    \item {{tech_line}}
 {{/if}}{{#bullets}}    \item {{text}}
 {{/bullets}}\end{itemize}{{/if}}
