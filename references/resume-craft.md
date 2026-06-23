@@ -156,6 +156,42 @@
 
 ---
 
+## E3. 技术栈规范（什么能进、什么不能进）
+
+**定义**：技术栈是候选人**有实际使用经验、能独立完成相关开发任务**的技术集合——属于**技术能力**，不是项目成果。用于快速判断技术方向与能力边界。
+
+### 可以进技术栈（按需分类，命中 JD 的类别在前）
+- 编程语言：Python、Java、C++、Go、TypeScript、SQL…
+- 前端：Vue3、React、Next.js、Element Plus、ECharts…
+- 后端：Spring Boot、FastAPI、Flask、Gin、Node.js…
+- 数据库 / 中间件：MySQL、PostgreSQL、Redis、MongoDB、Elasticsearch、Kafka…
+- AI / 大模型：PyTorch、Transformers、LangChain、LlamaIndex、vLLM、SGLang、RAG、Agent、MCP…
+- 数据工程：Pandas、NumPy、Spark、Airflow…
+- DevOps / 云原生：Linux、Docker、Kubernetes、Git、Nginx…
+- ML / CV：Scikit-Learn、XGBoost、OpenCV、MMCV、YOLO、SAM…
+- 向量库 / 检索框架 / 可观测等具体中间件：Qdrant、Milvus、FAISS、Haystack、LiteLLM…
+
+### **不能**进技术栈（Agent 必须过滤掉）
+- ❌ **项目名称**：智慧旅游平台、电商推荐系统、多Agent选课推荐系统
+- ❌ **产品名称**：ChatGPT、Claude、Cursor（除非确为你日常使用的工具栈，且单独标注）
+- ❌ **荣誉奖项**：国家奖学金、ACM 银奖
+- ❌ **论文 / 专利**：CVPR 论文、发明专利
+- ❌ **软技能**：沟通能力、团队协作、学习能力
+- ❌ **工作内容 / 能力描述**：召回与排序、系统设计（这些写进 bullet，不是技术栈）
+
+### 算法 / 范式的归属（重要）
+像 BM25、RRF、RAG、Multi-Agent、LoRA 这类**算法/范式/方法**：
+- 若是该岗位的**核心技术方向标签**（如 AI 岗的 RAG、Agent、MCP），可少量进技术栈。
+- 但**具体算法细节**（如 RRF、DBSF、small-to-big）更适合写进 bullet 体现「实际用过、懂取舍」，而非堆在技术栈行——技术栈行只放最能代表能力边界的项。
+
+### 长度
+- **技术栈只保留约一行**（铺满一行、不折行到孤行；见 A3）。挑最能命中 JD、最代表能力的项，多余的删。
+
+### 项目简介
+- **每个项目（含独立项目）首条用一句话简介**：这个项目是什么、解决什么问题（即 STAR 的 S+T，见 B 节）。让读者先懂"这是什么"，再看技术细节。
+
+---
+
 ## F. 岗位差异化（全岗位通用，按 JD 类型调整强调点）
 
 | 岗位类型 | 重点强调 | 弱化 |
@@ -178,5 +214,7 @@
 - [ ] B/C：每条是否动词开头、尽量带数字、成果导向？
 - [ ] **项目段是否符合 STAR**（S+T 背景任务、A 行动、R 量化结果齐全）？
 - [ ] **专业语言（E2）**：无泛化动词/形容词自夸/口语；术语大小写与中英空格规范统一？
+- [ ] **技术栈（E3）**：只含真实用过的技术能力、约一行；无项目名/产品名/荣誉/论文/软技能/工作内容混入？
+- [ ] **每个项目是否有一句话简介**（S+T）？
 - [ ] 加粗是否克制（每条≤1~2 处、不整句）？
 - [ ] 缺口是否未编造（见 tailoring-rules.md）？
