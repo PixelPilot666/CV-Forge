@@ -1,0 +1,26 @@
+# 用户真实素材库（含个人隐私 PII），绝不入库
+data/master-profile.yaml
+data/master-profile.yml
+data/master-profile.json
+
+# 生成产物
+output/
+
+# LaTeX 中间产物
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# OS
+.DS_Store

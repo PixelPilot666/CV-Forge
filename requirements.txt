@@ -1,0 +1,2 @@
+# jd-resume Python 依赖（stdlib 优先，仅一个第三方依赖）
+PyYAML>=6.0
