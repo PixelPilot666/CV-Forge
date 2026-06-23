@@ -19,6 +19,8 @@ import sys
 
 # 默认按"已格式化 LaTeX 片段"处理、不转义的字段(由编排层拼装好排版)
 DEFAULT_RAW_KEYS = {"heading", "date", "title", "photo_size", "tech_line"}
+# 这些字段转义后还支持 **粗体** 标记(bullet 正文安全加粗)
+DEFAULT_BOLD_KEYS = {"text"}
 
 _SPECIALS = [
     ("\\", r"\textbackslash{}"),  # 必须最先处理
@@ -46,6 +48,22 @@ def latex_escape(s):
         s = s.replace(ch, rep)
     s = s.replace(placeholder, r"\textbackslash{}")
     return s
+
+
+# 成对的 **粗体** 标记: 用于 bullet 正文安全加粗(内容仍被转义)
+_BOLD_RE = re.compile(r"\*\*(.+?)\*\*", re.S)
+
+
+def escape_with_bold(s):
+    """先 LaTeX 转义, 再把成对的 **文本** 转成 \\textbf{文本}。
+
+    `*` 不是 LaTeX 特殊字符, 转义后仍保留, 因此可安全地在转义之后识别成对标记。
+    单个未成对的 * 不受影响(原样保留)。
+    """
+    if s is None:
+        return ""
+    escaped = latex_escape(s)
+    return _BOLD_RE.sub(lambda m: r"\textbf{" + m.group(1) + "}", escaped)
 
 
 # --- 解析: 把模板切成 token 流, 再递归渲染 ---
@@ -113,7 +131,7 @@ def _truthy(v):
     return bool(v)
 
 
-def _render_nodes(nodes, ctx, raw_keys):
+def _render_nodes(nodes, ctx, raw_keys, bold_keys):
     out = []
     for node in nodes:
         if node[0] == "text":
@@ -123,6 +141,8 @@ def _render_nodes(nodes, ctx, raw_keys):
             val = ctx.get(name, "")
             if name in raw_keys:
                 out.append("" if val is None else str(val))
+            elif name in bold_keys:
+                out.append(escape_with_bold(val))
             else:
                 out.append(latex_escape(val))
         elif node[0] == "block":
@@ -130,10 +150,10 @@ def _render_nodes(nodes, ctx, raw_keys):
             val = ctx.get(name)
             if kind == "if":
                 if _truthy(val):
-                    out.append(_render_nodes(children, ctx, raw_keys))
+                    out.append(_render_nodes(children, ctx, raw_keys, bold_keys))
             elif kind == "inv":
                 if not _truthy(val):
-                    out.append(_render_nodes(children, ctx, raw_keys))
+                    out.append(_render_nodes(children, ctx, raw_keys, bold_keys))
             elif kind == "section":
                 if isinstance(val, list):
                     for item in val:
@@ -142,23 +162,25 @@ def _render_nodes(nodes, ctx, raw_keys):
                             child_ctx.update(item)
                         else:
                             child_ctx = {"_": item}
-                        out.append(_render_nodes(children, child_ctx, raw_keys))
+                        out.append(_render_nodes(children, child_ctx, raw_keys, bold_keys))
                 elif _truthy(val):
                     # 非列表真值 -> 当作单次渲染(可携带 dict 字段)
                     child_ctx = dict(ctx)
                     if isinstance(val, dict):
                         child_ctx.update(val)
-                    out.append(_render_nodes(children, child_ctx, raw_keys))
+                    out.append(_render_nodes(children, child_ctx, raw_keys, bold_keys))
     return "".join(out)
 
 
-def render(tmpl, context, raw_keys=None):
-    """渲染模板字符串。context 为 dict; raw_keys 中的标量不转义。"""
+def render(tmpl, context, raw_keys=None, bold_keys=None):
+    """渲染模板字符串。context 为 dict; raw_keys 不转义; bold_keys 转义后支持 **粗体**。"""
     if raw_keys is None:
         raw_keys = DEFAULT_RAW_KEYS
+    if bold_keys is None:
+        bold_keys = DEFAULT_BOLD_KEYS
     tokens = _tokenize(tmpl)
     nodes, _ = _parse(tokens)
-    return _render_nodes(nodes, context, raw_keys)
+    return _render_nodes(nodes, context, raw_keys, bold_keys)
 
 
 # --- 命令行: profile + tailor.json -> 模板上下文 ---

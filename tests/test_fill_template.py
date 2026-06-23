@@ -30,6 +30,33 @@ class TestLatexEscape(unittest.TestCase):
         self.assertEqual(ft.latex_escape("普通中文文本"), "普通中文文本")
 
 
+class TestBoldMarkdown(unittest.TestCase):
+    """`**x**` in bullet text -> \\textbf{x}, but the content is still LaTeX-escaped."""
+
+    def test_bold_converted_after_escape(self):
+        # 50% must escape to 50\%, and ** ** must become \textbf{}
+        out = ft.escape_with_bold("**P@1 提升 96.7%**")
+        self.assertEqual(out, r"\textbf{P@1 提升 96.7\%}")
+
+    def test_bold_partial(self):
+        out = ft.escape_with_bold("指标 **96.7%** 显著提升")
+        self.assertEqual(out, r"指标 \textbf{96.7\%} 显著提升")
+
+    def test_no_bold_plain_escape(self):
+        out = ft.escape_with_bold("a_b 50%")
+        self.assertEqual(out, r"a\_b 50\%")
+
+    def test_literal_asterisk_not_paired(self):
+        # a single * is not a bold marker; it should be left as-is (escaped form)
+        out = ft.escape_with_bold("3 * 4 = 12")
+        self.assertNotIn(r"\textbf", out)
+
+    def test_bullet_text_uses_bold(self):
+        out = ft.render("{{#bullets}}{{text}}{{/bullets}}",
+                        {"bullets": [{"text": "**核心**成果"}]})
+        self.assertEqual(out, r"\textbf{核心}成果")
+
+
 class TestScalar(unittest.TestCase):
     def test_scalar_substitution_escapes(self):
         out = ft.render("姓名 {{name}}", {"name": "a_b"})
