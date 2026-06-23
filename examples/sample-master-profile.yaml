@@ -1,0 +1,118 @@
+# 脱敏示例素材库 —— 仅用于演示与测试，姓名/联系方式均为虚构。
+# 你的真实素材库由 extract_profile.py 生成在 data/master-profile.yaml（已 gitignore）。
+schema_version: 1
+meta:
+  lang: zh
+  updated: "2026-06-23"
+basics:
+  name: 李明
+  phone: "138-0000-0000"
+  email: liming@example.com
+  photo: false
+  photo_size: 0.12
+  headline: 后端 / Agent 工程师
+
+summary: |
+  计算机硕士，专注大模型应用与检索增强生成（RAG）。有端到端 Agent 系统、
+  混合检索与模型微调的完整落地经验，熟悉高并发后端与工程化评测。
+
+skills:
+  - group: 编程语言
+    items:
+      - name: Python
+        level: expert
+        years: 4
+        evidence_refs: [expe-rag, proj-course-agent]
+      - name: Go
+        level: familiar
+  - group: 大模型 / 检索
+    items:
+      - name: LangChain
+        evidence_refs: [expe-rag]
+      - name: LangGraph
+        evidence_refs: [proj-course-agent]
+      - name: RAG
+        evidence_refs: [expe-rag, proj-course-agent]
+      - name: BGE-M3
+        evidence_refs: [expe-rag]
+  - group: 后端 / 基础设施
+    items:
+      - name: FastAPI
+        evidence_refs: [expe-rag, proj-course-agent]
+      - name: Milvus
+        evidence_refs: [proj-course-agent]
+      - name: Docker
+
+education:
+  - id: edu-grad
+    school: 某重点大学（985），计算机技术，硕士
+    date: "2024.09 - 2027.06"
+    bullets:
+      - id: edu-grad-b1
+        text: "导师：某重点实验室教授；研究方向高分辨率视觉与多模态"
+      - id: edu-grad-b2
+        text: "荣誉奖项：一等学业奖学金、推免奖学金"
+  - id: edu-undergrad
+    school: 某邮电大学，软件工程，本科，成绩排名 1/65
+    date: "2020.09 - 2024.06"
+    bullets:
+      - id: edu-undergrad-b1
+        text: "荣誉奖项：校级奖学金、学科竞赛省级二等奖"
+
+experience:
+  - id: expe-rag
+    org: 某科技有限公司
+    title: Agent 工程师
+    date: "2025.01 - 2026.01"
+    tech: [LangChain, FastAPI, FAISS, BGE-M3, LoRA, RAGAS]
+    tags: [RAG, 检索, 微调, Agent, 系统设计]
+    bullets:
+      - id: expe-rag-b1
+        text: "构建端到端旅行套餐生成系统，基于 RAG 将自然语言需求与资源库匹配组合，实现个性化推荐；约 42s 内完成 105+ 候选筛选与组合，将数小时人工流程压缩至分钟级"
+        metrics: {latency_s: 42, candidates: 105}
+        tags: [RAG, 系统设计]
+      - id: expe-rag-b2
+        text: "设计语义向量召回 + 用户画像排序双通道检索，基于 BGE-M3 + FAISS + RRF 实现混合召回，结合属性级 Chunk 与 Metadata 约束过滤，显著提升复杂约束下的召回质量"
+        tags: [检索, 混合召回]
+      - id: expe-rag-b3
+        text: "基于难负例数据对 BGE-M3 微调，P@1 从 86.7% 提升至 96.7%，P@3 从 97.8% 提升至 98.9%"
+        metrics: {p_at_1_before: 86.7, p_at_1_after: 96.7, p_at_3_before: 97.8, p_at_3_after: 98.9}
+        tags: [微调, 评测]
+      - id: expe-rag-b4
+        text: "采用先检索后生成范式，引入预算/数量/主题一致性约束，Top1 组品成功率达 81.34%，构建从检索到生成的完整评测闭环"
+        metrics: {top1_success: 81.34}
+        tags: [RAG, 评测]
+
+projects:
+  - id: proj-course-agent
+    name: 多 Agent 选课推荐系统
+    role: 独立项目
+    date: ""
+    url: https://github.com/example/course-recommend-agent
+    tech: [FastAPI, LangGraph, Milvus, MySQL, Redis, Docker]
+    tags: [Multi-Agent, RAG, 系统设计]
+    bullets:
+      - id: proj-course-agent-b1
+        text: "构建面向教务场景的多 Agent 选课推荐系统，支持自然语言输入兴趣/时间/校区偏好，实现个性化课程推荐"
+        tags: [Multi-Agent]
+      - id: proj-course-agent-b2
+        text: "基于 LangGraph 设计 Supervisor 多 Agent 编排，拆分为画像/召回/重排/校验/解释五阶段，提升可控性与可降级能力"
+        tags: [Multi-Agent, 系统设计]
+      - id: proj-course-agent-b3
+        text: "构建 MySQL + Milvus 课程 RAG 数据层，结合 Redis 缓存候选集合，降低高频请求检索开销"
+        tags: [RAG, 检索]
+
+research:
+  - id: pub-seg
+    name: "Boosting the dual-stream architecture in ultra-high resolution segmentation"
+    venue: CVPR 2025 (CCF-A)
+    role: 共同一作
+    date: ""
+    bullets:
+      - id: pub-seg-b1
+        text: "提出分辨率偏置的不确定性估计与适配框架，定位分辨率缺失导致的错误像素并针对性处理，提升高分辨率分割精度与推理效率"
+
+preferences:
+  target_titles: [后端工程师, Agent 工程师, 大模型应用工程师]
+  max_pages: 1
+  exclude_ids: []
