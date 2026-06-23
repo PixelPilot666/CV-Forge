@@ -53,8 +53,15 @@ class TestWorkflowWiring(unittest.TestCase):
     def test_references_the_guard_docs(self):
         text = _read()
         for doc in ("tailoring-rules", "profile-schema", "resume-craft",
-                    "review-rubric", "interview"):
+                    "review-rubric", "interview", "review-agent"):
             self.assertIn(doc, text, f"SKILL.md should point to references/{doc}.md")
+
+    def test_review_must_be_independent_subagent(self):
+        text = _read()
+        self.assertTrue("子 agent" in text or "子agent" in text or "sub-agent" in text,
+                        "review must be delegated to a sub-agent")
+        self.assertTrue("自评" in text or "不得自评" in text,
+                        "must state that the generating agent does not self-score")
 
     def test_states_whole_page_and_verbatim_rules(self):
         text = _read()

@@ -70,11 +70,18 @@ bash scripts/render_pdf.sh output/<dir>/resume.tex -o output/<dir>
 - 偏多 → 压缩 bullet / 精简措辞；偏少 → 补**一种**（技能/个人特点/爱好）。
 - 调整后重跑第 5 步，直到接近整页且铺满。
 
-### 6. 专家评审 + 匹配报告
+### 6. 独立子 agent 评审 + 匹配报告（不可自评）
 ```bash
 python3 scripts/ats_check.py <jd.txt> output/<dir>/resume.pdf
+pdftotext output/<dir>/resume.pdf output/<dir>/resume.txt   # 给评审子 agent 的输入
 ```
-按 `references/review-rubric.md` 给简历打分（六维度），生成 `output/<dir>/match-report.md`：覆盖表 + ATS 命中表 + 缺口清单 + **补强审计** + **专家评审打分与逐条改进清单**。若量化维度偏低，回到 3.5 追问后再迭代。
+**质量评判必须由独立子 agent 完成，生成 agent 不得自评**（自评会偏高）。按 `references/review-agent.md`：
+- spawn **评审员**子 agent：只拿 JD + 渲染后简历纯文本 + `references/review-rubric.md`，按六维度打分（满分 30）+ 改进点。
+- spawn **对抗挑错员**子 agent：专找虚报/夸大/不专业/不可追溯（可对照 master profile 核对超出素材的内容）。
+- **交付门槛**：评审 total ≥ 26 且无 high severity red_flag。
+- **不达标 → 自动迭代一轮**：按结论修订 tailor.json（仍守真实性边界，缺数字只能追问不可编造）→ 重跑第 5 步 → 再评审；最多迭代 1 轮。
+
+把评审分数、对抗发现、迭代过程写入 `output/<dir>/match-report.md`（覆盖表 + ATS 命中 + 缺口 + 补强审计 + **独立评审结论**）。
 
 ## 产物
 
