@@ -18,7 +18,7 @@ import re
 import sys
 
 # 默认按"已格式化 LaTeX 片段"处理、不转义的字段(由编排层拼装好排版)
-DEFAULT_RAW_KEYS = {"heading", "date", "title", "photo_size"}
+DEFAULT_RAW_KEYS = {"heading", "date", "title", "photo_size", "tech_line"}
 
 _SPECIALS = [
     ("\\", r"\textbackslash{}"),  # 必须最先处理
@@ -189,10 +189,12 @@ def build_context(profile, tailor):
         "photo": bool(basics.get("photo", False)),
         "photo_size": basics.get("photo_size", 0.12),
     }
-    # 建立 bullet id -> text 索引
+    # 建立 bullet id -> text 与 entry id -> tech 索引
     bullet_text = {}
+    entry_tech = {}
     for sect in ("experience", "projects", "research", "education"):
         for entry in profile.get(sect, []) or []:
+            entry_tech[entry.get("id")] = entry.get("tech") or []
             for b in entry.get("bullets", []) or []:
                 bullet_text[b["id"]] = b.get("text", "")
 
@@ -206,10 +208,20 @@ def build_context(profile, tailor):
                 text = overrides.get(bid, bullet_text.get(bid, ""))
                 if text:
                     bullets.append({"text": text})
+            # 技术栈行: 优先用 tailor 显式给的 tech_line, 否则从 profile 的 tech 拼装
+            tech_line = e.get("tech_line", "")
+            if not tech_line and e.get("show_tech", True):
+                tech = entry_tech.get(e.get("ref"), [])
+                if tech:
+                    # tech 项是纯文本, 逐个转义后用 LaTeX 的 \textbf 标签包住"技术栈"
+                    items = " · ".join(latex_escape(t) for t in tech)
+                    tech_line = r"\textbf{技术栈}：" + items
             entries.append({
                 "heading": e.get("heading", ""),
                 "date": e.get("date", ""),
+                "tech_line": tech_line,
                 "bullets": bullets,
+                "has_items": bool(tech_line or bullets),
             })
         sections.append({"title": s.get("title", ""), "entries": entries})
     ctx["sections"] = sections

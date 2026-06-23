@@ -1,0 +1,60 @@
+{
+  "company": "示例公司",
+  "role": "大模型应用 / Agent 工程师",
+  "_note": "针对 examples/sample-jd.txt 的裁剪结果。按 JD 相关性把实习(RAG)与项目(多Agent)置于教育之前，并保留含技术关键词的技术栈要点。所有 bullet 均来自 master profile，未编造。",
+  "sections": [
+    {
+      "title": "实习经历",
+      "entries": [
+        {
+          "ref": "expe-rag",
+          "heading": "\\textbf{Agent 工程师} \\hfill \\textbf{某科技有限公司}",
+          "date": "2025.01 - 2026.01",
+          "bullet_ids": ["expe-rag-b1", "expe-rag-b2", "expe-rag-b3", "expe-rag-b4"],
+          "bullet_overrides": {
+            "expe-rag-b2": "设计语义向量检索 + 用户画像排序的双通道检索，基于 BGE-M3 + FAISS + RRF 实现混合召回与排序融合，结合属性级 Chunk 与 Metadata 约束过滤，显著提升复杂约束下的召回质量"
+          }
+        }
+      ]
+    },
+    {
+      "title": "项目经历",
+      "entries": [
+        {
+          "ref": "proj-course-agent",
+          "heading": "\\textbf{多 Agent 选课推荐系统}（独立项目）",
+          "date": "",
+          "bullet_ids": ["proj-course-agent-b1", "proj-course-agent-b2", "proj-course-agent-b3"]
+        }
+      ]
+    },
+    {
+      "title": "科研经历",
+      "entries": [
+        {
+          "ref": "pub-seg",
+          "heading": "\\textbf{Boosting the dual-stream architecture in ultra-high resolution segmentation}",
+          "date": "",
+          "bullet_ids": ["pub-seg-b1"]
+        }
+      ]
+    },
+    {
+      "title": "教育经历",
+      "entries": [
+        {
+          "ref": "edu-grad",
+          "heading": "\\textbf{某重点大学（985）}，计算机技术，\\textit{硕士}",
+          "date": "2024.09 - 2027.06",
+          "bullet_ids": ["edu-grad-b2"]
+        },
+        {
+          "ref": "edu-undergrad",
+          "heading": "\\textbf{某邮电大学}，软件工程，\\textit{本科}，成绩排名 1/65",
+          "date": "2020.09 - 2024.06",
+          "bullet_ids": ["edu-undergrad-b1"]
+        }
+      ]
+    }
+  ]
+}
