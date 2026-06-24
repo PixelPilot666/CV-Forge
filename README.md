@@ -1,212 +1,142 @@
 <div align="center">
 
-# 📄 jd-resume
+# jd-resume
 
-**一个开源的 Claude Code Skill — 根据职位描述（JD）自动生成定制化、真实、排版精美的简历。**
+> *「同一份经历，每个岗位都该看到不一样的你。」*
 
-以"资深简历专家"的标准打磨内容，守住一条底线：**真实为主，合理补强，绝不编造**。
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Agent Skill](https://img.shields.io/badge/Agent%20Skill-Standard-green)](https://agentskills.io)
+[![Runtime](https://img.shields.io/badge/Runtime-Claude%20Code%20·%20Codex%20·%20Cursor-blueviolet)](#安装)
+[![PDF](https://img.shields.io/badge/输出-精排%20PDF-success)](#)
 
-<p>
-<img alt="license" src="https://img.shields.io/badge/license-MIT-blue.svg">
-<img alt="python" src="https://img.shields.io/badge/python-3.9%2B-blue.svg">
-<img alt="engine" src="https://img.shields.io/badge/PDF-XeLaTeX%20(tectonic)-success.svg">
-<img alt="lang" src="https://img.shields.io/badge/简历语言-中文%20(v1)-orange.svg">
-</p>
+<br>
+
+**把一份职位描述丢给它，它按这个岗位把你的简历重写一遍——真实、专业、一页排版精美的 PDF。**
+
+<sub>不是帮你瞎编经历的 AI。是一个懂行的简历专家：只用你真实做过的事，按岗位重新讲一遍。</sub>
+
+[看效果](#效果示例) · [安装](#安装) · [怎么用](#怎么用) · [它凭什么不一样](#它凭什么不一样)
 
 </div>
 
 ---
 
-## ✨ 这是什么
+## 效果示例
 
-把"对着 JD 改简历"这件重复又耗神的事交给 Claude。你只需维护一份个人素材库，
-之后每投一个岗位，skill 会按 JD 自动筛选、重排、专业化改写，并编译出一份 PDF + 一份匹配分析报告。
+**同一段实习，投不同的岗位，它讲的故事不一样。**
+
+你素材库里的原始记录：
 
 ```
-JD（文本 / 链接 / 截图）
-        │
-        ▼
-  解析 JD，提取要求与关键词
-        │
-        ▼
-  加载素材库 master-profile.yaml ──► 缺数字？主动向你追问（绝不编造）
-        │
-        ▼
-  匹配分析（覆盖 / 部分 / 缺口 + ATS 关键词命中）
-        │
-        ▼
-  专家裁剪（STAR · 强动词 · 量化 · 专业语言 · 适度加粗）
-        │
-        ▼
-  填模板 → 保真校验 → 编译 PDF → 整页校准
-        │
-        ▼
-  独立子 agent 评审（评审员 + 对抗挑错员，不自评）
-        │
-        ▼
-  resume.pdf  +  match-report.md
+- 做了个推荐系统，用了 RAG、向量召回、BGE-M3 微调，P@1 85→95%
 ```
 
-## 🎯 核心理念
+投「推荐算法」岗，它强调召回排序与指标：
 
-| 理念 | 含义 |
-|---|---|
-| **真实为主，合理补强** | 只重排、筛选、按 JD 润色、突出已有真实指标；**绝不**编造经历/数字/技能。每次生成都带审计追踪。 |
-| **关键信息原样保留** | 姓名、公司名、岗位名、起止时间、论文名、项目名一字不差，由 `check_fidelity.py` 机器校验。 |
-| **素材库是长期资产** | 简历是一次性产物；结构化的 `master-profile.yaml` 才是反复复用、越用越完整的核心。 |
-| **质量由独立子 agent 评判** | 生成的 agent 不给自己打分（会偏高）；由独立子 agent 打分 + 对抗挑错，不达标自动迭代。 |
-| **不绑死运行环境** | LaTeX 引擎运行时探测，缺失则引导安装；降级是你的选择，不是默认。 |
+```
+❯ 设计「语义向量召回 + 用户画像排序」双通道，基于 BGE-M3、FAISS 与 RRF 实现混合召回，
+  召回精度 P@1 由 85% 提升至 95%，并建立可量化的离线评测体系
+```
 
-## 🧩 能力一览
+投「Agent 开发」岗，同一段经历换个重心：
 
-- ✅ **JD 多形态输入**：粘贴文本 / 招聘网页链接 / 截图。
-- ✅ **专家级写作**：STAR 项目描述、强动词、量化纪律、去 AI 味、适度加粗关键指标。
-- ✅ **智能排序**：按 JD 相关性决定章节顺序（如科研 vs 项目谁在前），块内按时间倒序。
-- ✅ **整页纪律**：自动校准到接近整页，不足补一类内容、超出则压缩。
-- ✅ **ATS 关键词命中检查**：对渲染后 PDF 文本做核对，反映 ATS 真正看到的内容。
-- ✅ **保真校验**：关键字段与素材库逐一比对，杜绝改写公司名/论文名等。
-- ✅ **独立评审 + 对抗挑错**：双子 agent 评审，揪出虚报、夸大、不专业、不可追溯。
-- ✅ **完整审计**：`tailor.json` 记录每条内容来源，`match-report.md` 给出评分与改进清单。
+```
+❯ 负责检索内核，实现「多子问题扩展 → 双轨检索 → 融合 → Rerank → 引文组装」的多阶段流水线，
+  把异构文档变成可检索内容，并产出带引文的回答上下文
+```
 
-## 📦 功能支持矩阵
+**它不会替你吹牛。** JD 要 Rust、你没写过，它不会硬塞，而是如实告诉你：
 
-| 维度 | v1（当前） | 规划中 |
-|---|---|---|
-| 简历语言 | 中文 | 英文 / 中英双语 |
-| 输出格式 | LaTeX → PDF | 飞书在线文档 / Word(.docx) / Markdown / HTML |
-| 模板 | 内置中文经典模板 `zh-classic` | 用户自定义模板 / 联网搜索模板 |
-| 素材来源 | 旧简历抽取 + 文档/对话补充 | 项目源码/文档批量抽取 |
+```
+❯ 缺口（未写入简历）：Rust —— 你的素材库里没有相关证据。
+  如果你确实用过，告诉我在哪用的，我补进去；没有就不写。
+```
+
+> 公司名、岗位名、论文名、时间——这些它一个字都不会改，有机器校验兜底。它只重排、筛选、按岗位重新措辞，绝不编造。
 
 ---
 
-## 🚀 安装到你的 AI 编码工具
+## 安装
 
-只需把这个目录放到工具的 skill / 规则目录即可，**无需配置 Python 环境**——脚本会在需要时自动安装唯一的依赖（PyYAML）。
+### 一行话搞定（推荐）
 
-<details open>
-<summary><b>Claude Code（推荐）</b></summary>
+打开你在用的 agent（Claude Code / Codex / Cursor 等），对它说：
+
+```
+帮我安装这个 skill：https://github.com/<your-name>/jd-resume
+```
+
+或用通用安装器：
 
 ```bash
-# 个人全局可用
-git clone <this-repo-url> ~/.claude/skills/jd-resume
-
-# 或仅在某个项目里可用
-git clone <this-repo-url> /path/to/project/.claude/skills/jd-resume
+npx skills add <your-name>/jd-resume
 ```
-Claude Code 会自动发现 `SKILL.md` 并按其 `description` 在合适时机触发；你也可以直接说"用 jd-resume 根据这份 JD 生成简历"。
-</details>
 
 <details>
-<summary><b>Codex / 其他读 AGENTS.md 或自定义规则的工具</b></summary>
+<summary>手动安装 / 各 runtime 目录</summary>
 
-skill 的"大脑"是纯 Markdown 的 `SKILL.md` + `references/`，与具体工具无关。两种接入方式：
+| Runtime | 路径 |
+|---|---|
+| Claude Code | `~/.claude/skills/jd-resume/`（或项目内 `.claude/skills/`） |
+| Codex CLI | `~/.codex/skills/jd-resume/` |
+| Cursor | `~/.cursor/skills/jd-resume/` |
+| 其他 | clone 到对应 runtime 的 `skills/` 目录 |
 
-1. 克隆到项目里，在你的规则文件（如 `AGENTS.md`、`.cursorrules`）中加一行指引：
-   > 涉及"根据 JD 生成/定制简历"时，请阅读并遵循 `jd-resume/SKILL.md` 的工作流。
-2. 或直接把 `jd-resume/SKILL.md` 的内容贴给模型作为系统提示。
+```bash
+git clone https://github.com/<your-name>/jd-resume <上面对应的路径>
+```
 
-脚本是标准 Python 3 / shell，任何能执行命令的 agent 都能调用。
+不支持自动加载？直接把 `SKILL.md` 的内容粘进对话也能用——它本质就是一份 markdown。
 </details>
 
-<details>
-<summary><b>不接入工具，纯手动用</b></summary>
-
-脚本可独立运行，见下方[使用](#-使用)中的命令示例。
-</details>
-
-### 唯一的系统前置：一个 LaTeX 引擎（用于编译中文 PDF）
-
-PDF 排版需要 XeLaTeX 引擎，这是系统级软件，需安装一次。推荐 [**tectonic**](https://tectonic-typesetting.github.io/)（单二进制、跨平台、按需下载宏包）：
+**唯一的系统前置**：一个 LaTeX 引擎（编译中文 PDF 用）。装一次：
 
 ```bash
 brew install tectonic        # macOS
-apt install texlive-xetex    # Debian/Ubuntu（或下载 tectonic release）
-winget install tectonic      # Windows（或 scoop install tectonic）
+apt install texlive-xetex    # Linux
+winget install tectonic      # Windows
 ```
 
-> skill 运行时会自动探测引擎；没装时它会停下来给你对应系统的安装命令，**不会静默降级**。Python 依赖（PyYAML）则完全自动，你无需手动 `pip install`。
+> Python 依赖全自动，你不用碰 `pip`。没装引擎也不慌——它会停下来告诉你装哪个。
 
 ---
 
-## 📖 使用
+## 怎么用
 
-### 你需要准备什么
+**第一次**，给它一份旧简历或项目文档，它帮你建一份可复用的素材库，并就缺的数字追问你：
 
-1. **一份目标 JD**（文本、网页链接或截图均可）。
-2. **你的个人素材**：一份旧简历（`.tex` / `.pdf` / `.md` / `.docx`）或一份项目文档即可起步——skill 会帮你抽取成结构化素材库。
+```
+> 这是我的简历 resume.pdf，帮我建素材库
+```
 
-### 步骤
+**之后**，投哪个岗位就把 JD 丢给它（文本、链接、截图都行）：
 
-**① 启动**——把目录作为 skill 加载后，对 Claude 说：
+```
+> 根据这份 JD 帮我改简历：<粘贴 JD>
+> 投字节这个 Agent 岗，简历重点往 Agent 开发上靠
+> 这版太满了，压到一页
+```
 
-> 帮我根据这份 JD 生成简历：
-> （粘贴 JD 文本 / 给招聘链接 / 贴截图）
+产出在 `output/` 里：可直接投的 `resume.pdf`、能手改的 `resume.tex`、还有一份**匹配报告**——告诉你这份简历覆盖了 JD 哪些要求、ATS 关键词命中多少、哪些是真实缺口。
 
-**② 建立素材库（首次）**——skill 会从你的旧简历/文档抽取出 `data/master-profile.yaml`，并就缺失项（如量化指标）**向你追问**。确认补充后即成为你的可复用素材库。
+> 换岗位再投，直接复用素材库，不用重新录入。
 
-**③ 生成与评审**——skill 自动完成：匹配分析 → 专家裁剪 → 编译 PDF → 保真校验 → 独立子 agent 评审。不达标会自动迭代一轮，并把评审结论写进报告。
+---
 
-**④ 取件**——产物在 `output/<公司>-<岗位>-<语言>-<日期>/`：
+## 它凭什么不一样
 
-| 文件 | 内容 |
+市面上的 AI 简历工具，要么套模板，要么帮你编。这个不。
+
+| | 它怎么做 |
 |---|---|
-| `resume.pdf` | 最终简历（可直接投递） |
-| `resume.tex` | LaTeX 源文件（可手动微调） |
-| `tailor.json` | 裁剪方案（每条内容的来源审计） |
-| `match-report.md` | JD 匹配报告 + ATS 命中 + 独立评审打分与改进清单 |
-
-> 之后换岗位投递，直接复用 `master-profile.yaml`，无需重新录入。
-
----
-
-## 🗂 项目结构
-
-```
-jd-resume/
-├── SKILL.md                  # skill 入口：触发条件 + 工作流编排
-├── SPEC.md                   # 规格说明
-├── references/               # 按需加载的专家知识库
-│   ├── resume-craft.md       # 写作准则（STAR/量化/专业语言/整页纪律/技术栈规范…）
-│   ├── tailoring-rules.md    # 真实性硬边界（允许补强 vs 禁止编造）
-│   ├── profile-schema.md     # 素材库格式定义
-│   ├── jd-analysis.md        # JD 解析与匹配分析
-│   ├── review-rubric.md      # 六维度评分标准
-│   ├── review-agent.md       # 独立子 agent 评审（评审员 + 对抗挑错员）
-│   ├── interview.md          # 缺口追问访谈流程
-│   └── workflow.md           # 完整工作流展开
-├── scripts/                  # 确定性脚本（Python 为主 + 少量 shell）
-│   ├── extract_profile.py    # 从 LaTeX 简历抽取素材库
-│   ├── validate_profile.py   # 素材库 schema 校验
-│   ├── fill_template.py      # 占位符填充 + LaTeX 转义 + 加粗
-│   ├── check_fidelity.py     # 关键信息 verbatim 保真校验
-│   ├── detect_engine.sh      # 探测 LaTeX 引擎
-│   ├── render_pdf.sh         # 编译 PDF（缺引擎给安装指引）
-│   └── ats_check.py          # ATS 关键词命中检查
-├── assets/templates/zh-classic/   # 内置中文模板（含字体，开箱即用）
-├── examples/                 # 脱敏示例（素材库 / JD / 裁剪方案）
-├── tests/                    # 单元 + 端到端测试（stdlib unittest）
-└── requirements.txt          # PyYAML
-```
+| **真实为主，绝不编造** | 只重排、筛选、按 JD 重新措辞、突出你已有的真实指标。每条内容都能追溯到你的素材，关键信息（公司/岗位/论文/时间）有机器校验，一个字都不许改。 |
+| **像专家一样写** | 项目用 STAR 讲清背景与贡献，强动词开头、用数字说话、去掉 AI 腔和空话套话，关键指标加粗。 |
+| **一份素材，投十个岗** | 素材库是你的长期资产，越用越全。每次按 JD 现裁，不用一遍遍手改。 |
+| **自己不给自己打分** | 生成后交给独立的评审 agent 打分、再来一个专挑刺的找虚报和夸大，不达标自动重改一轮。 |
+| **铺满整页，不多不少** | 自动校准到接近整页：不够就补，超了就压，不留半页空白。 |
 
 ---
 
-## 🔒 隐私
+## 许可证
 
-- 你的真实素材库 `data/master-profile.yaml`（含姓名/电话/邮箱等）与生成产物 `output/` **默认在 `.gitignore` 中**，不会进入版本库。
-- 仓库内 `examples/` 仅提供**完全脱敏**的虚构样例。
-- 简历照片等本地资源不会被提交。
-
-## 🧪 开发与测试
-
-```bash
-python3 -m unittest discover -s tests -v
-```
-测试基于标准库 `unittest`，无需额外安装。详见 [CONTRIBUTING.md](./CONTRIBUTING.md)。
-
-## 🤝 贡献
-
-欢迎 PR：新增简历模板、扩展语言/输出格式、完善写作准则。请阅读 [CONTRIBUTING.md](./CONTRIBUTING.md)，并确保新模板字体许可证与 MIT 兼容、附测试。
-
-## 📜 许可证
-
-[MIT](./LICENSE)
+[MIT](./LICENSE) — 随便用，随便改。
