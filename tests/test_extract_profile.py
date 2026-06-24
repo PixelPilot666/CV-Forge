@@ -28,7 +28,7 @@ SAMPLE_TEX = r"""
 \datedsubsection{\textbf{Agent 工程师} \hfill \textbf{某科技有限公司}}{2025.01 - 2026.01}
 \begin{itemize}[parsep=0.5ex]
     \item \textbf{技术栈}：LangChain · FastAPI · FAISS
-    \item 构建端到端旅行套餐生成系统，P@1 从 86.7\% 提升至 96.7\%
+    \item 构建端到端推荐系统，P@1 从 85\% 提升至 95\%
 \end{itemize}
 
 \section{项目经历}
@@ -77,9 +77,9 @@ class TestExtractProfile(unittest.TestCase):
     def test_bullets_parsed(self):
         exp = self.p["experience"][0]
         texts = [b["text"] for b in exp["bullets"]]
-        self.assertTrue(any("旅行套餐" in t for t in texts))
+        self.assertTrue(any("推荐系统" in t for t in texts))
         # LaTeX escaping of % should be reverted to plain text in stored profile
-        self.assertTrue(any("86.7%" in t for t in texts))
+        self.assertTrue(any("85%" in t for t in texts))
 
     def test_commented_lines_ignored(self):
         names = []

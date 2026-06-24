@@ -99,7 +99,7 @@ YAML，人类可手维护。v1 从用户 `resume.tex` 抽取生成。详见 `ref
 **核心约定：**
 - **稳定 id**：`experience`/`projects`/`research` 下每个条目和每条 bullet 都有 id。裁剪 = 选择/重排/润色这些 id，**不新增 id**。
 - **`evidence_refs`（可选 + 软提醒）**：技能可指向证明它的经历/项目 id。填了 → 匹配报告能给出证据来源；没填 → 不报错，生成时标注“⚠️ 此技能未关联证据，请确认属实”。
-- **结构化 `metrics`**：把真实数字（如 P@1 86.7%→96.7%）结构化存储，补强 = 复用真实数字，而非编造。
+- **结构化 `metrics`**：把真实数字（如 P@1 85%→95%）结构化存储，补强 = 复用真实数字，而非编造。
 - **`tags`**：与 JD 要求匹配的语义标签。
 
 v1 关键 section（对应模板的四块）：`basics`（姓名/手机/邮箱/照片）、`summary`、`skills`、`education`、`experience`（实习）、`projects`、`research`（科研/论文）、`awards`、`preferences`（target_titles、max_pages、exclude_ids — 不打印，仅指导裁剪）。

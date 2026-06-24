@@ -44,7 +44,7 @@ experience:                 # 实习/工作经历
     tags: [RAG, 检索, 微调]   # 可选，语义标签，用于 JD 匹配
     bullets:
       - id: exp-acme-b1     # 必填，稳定 id
-        text: 构建端到端旅行套餐生成系统……   # 必填，要点文本（纯文本，自动 LaTeX 转义）
+        text: 构建端到端个性化推荐系统……   # 必填，要点文本（纯文本，自动 LaTeX 转义）
         metrics:             # 可选，结构化真实指标（补强=复用这些数字，不可编造）
           latency_s: 42
         tags: [RAG, 系统设计]
@@ -62,9 +62,9 @@ projects:                   # 项目经历，结构同 experience
         text: ...
 
 research:                   # 科研/论文，结构同上
-  - id: pub-cvpr-1
-    name: "Boosting the dual-stream architecture ..."   # 论文标题
-    venue: CVPR2025 (CCF-A)  # 可选，发表处
+  - id: pub-1
+    name: "Sample Paper Title ..."   # 论文标题
+    venue: SomeConf 2025  # 可选，发表处
     role: 共同一作            # 可选
     date: ""
     bullets:

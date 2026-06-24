@@ -32,10 +32,10 @@
       "title": "科研经历",
       "entries": [
         {
-          "ref": "pub-seg",
-          "heading": "\\textbf{Boosting the dual-stream architecture in ultra-high resolution segmentation}",
+          "ref": "pub-1",
+          "heading": "\\textbf{Sample Paper Title on Efficient High-Resolution Recognition}",
           "date": "",
-          "bullet_ids": ["pub-seg-b1"]
+          "bullet_ids": ["pub-1-b1"]
         }
       ]
     },
