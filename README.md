@@ -2,109 +2,101 @@
 
 # CV-Forge
 
-> *「每个岗位都该看到最好的你。」*
+> *「用真实的经历，打磨最契合的简历。」*
 
-**把一份职位描述丢给它，它按这个岗位把你的简历重写一遍——真实、专业、一页排版精美的 PDF。**
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Agent Skill](https://img.shields.io/badge/Agent%20Skill-Standard-green)](https://agentskills.io)
+[![Runtime](https://img.shields.io/badge/Runtime-Claude%20Code%20·%20Cursor%20·%20Codex-blueviolet)](#快速安装)
+[![PDF](https://img.shields.io/badge/输出-一页精排%20PDF-success)](#)
 
-<sub>用你真实做过的事，按岗位重新讲一遍。</sub>
+<br>
 
-[效果](#效果示例) · [安装](#安装) · [使用](#怎么用) 
+**简历动态重塑引擎。** 丢入岗位 JD，它将提取你的真实素材，自动重写、对齐需求，并生成一页排版的专业 PDF。
+
+[效果演示](#效果演示) · [快速安装](#快速安装) · [使用指南](#使用指南)
 
 </div>
 
 ---
 
-## 效果示例
+## 效果演示
 
-**同一段实习，投不同的岗位，它讲的故事不一样。**
+**同一段经历，投递不同岗位时的自适应重写。**
 
-你素材库里的原始记录：
-
-```
-- 做了个推荐系统，用了 RAG、向量召回、BGE-M3 微调，P@1 85→95%
-```
-
-投「推荐算法」岗，它强调召回排序与指标：
+原始素材记录：
 
 ```
-❯ 设计「语义向量召回 + 用户画像排序」双通道，基于 BGE-M3、FAISS 与 RRF 实现混合召回，
-  召回精度 P@1 由 85% 提升至 95%，并建立可量化的离线评测体系
+开发了一套业务监控与分析系统，优化了数据库查询链路，并加入了异常检测模型，
+系统响应变快，报警准确率提升了 20%。
 ```
 
-投「Agent 开发」岗，同一段经历换个重心：
+🎯 投递「算法 / 数据岗」时，聚焦模型与指标：
 
 ```
-❯ 负责检索内核，实现「多子问题扩展 → 双轨检索 → 融合 → Rerank → 引文组装」的多阶段流水线，
-  把异构文档变成可检索内容，并产出带引文的回答上下文
+❯ 设计并落地基于时序数据的异常检测算法，构建完善的离线与在线评估体系，
+  将核心报警准确率提升 20%，有效降低业务风险。
 ```
 
-**它不会替你吹牛。** JD 要 Rust、你没写过，它不会硬塞，而是如实告诉你：
+🎯 投递「后端 / 架构岗」时，聚焦工程与性能：
 
 ```
-❯ 缺口（未写入简历）：Rust —— 你的素材库里没有相关证据。
-  如果你确实用过，告诉我在哪用的，我补进去；没有就不写。
+❯ 负责监控系统核心链路的架构设计与性能调优，重构底层数据检索与聚合逻辑，
+  大幅降低查询延迟，保障系统高并发可用性。
 ```
 
-> 公司名、岗位名、论文名、时间——这些它一个字都不会改，有机器校验兜底。它只重排、筛选、按岗位重新措辞，绝不编造。
+### 🛡️ 恪守真实底线
+
+- **拒写幻觉**：若 JD 强要求 Go 语言而你的素材库未提及，系统会抛出「缺口提示」由你确认，**绝不凭空捏造技能**。
+- **硬性校验**：公司名、学历、时间节点、论文等客观实体由规则引擎严格兜底，**一字不改**。
 
 ---
 
-## 安装
+## 快速安装
 
-### 直接 clone 到你的 agent skills 目录（推荐）
+将项目克隆至目标 Agent 的 skills 目录即可（Agent 会自动加载 `SKILL.md`）：
 
-| Runtime | 命令 |
+| 运行环境 | 安装命令 |
 |---|---|
-| Claude Code | `git clone https://github.com/PixelPilot666/CV-Forge.git ~/.claude/skills/CV-Forge` |
-| Codex CLI | `git clone https://github.com/PixelPilot666/CV-Forge.git ~/.codex/skills/CV-Forge` |
-| Cursor | `git clone https://github.com/PixelPilot666/CV-Forge.git ~/.cursor/skills/CV-Forge` |
-| 仅在某项目里用 | `git clone https://github.com/PixelPilot666/CV-Forge.git <项目>/.claude/skills/CV-Forge` |
+| **Claude Code** | `git clone https://github.com/PixelPilot666/CV-Forge.git ~/.claude/skills/CV-Forge` |
+| **Cursor** | `git clone https://github.com/PixelPilot666/CV-Forge.git ~/.cursor/skills/CV-Forge` |
+| **Codex CLI** | `git clone https://github.com/PixelPilot666/CV-Forge.git ~/.codex/skills/CV-Forge` |
 
-clone 完，agent 会自动发现 `SKILL.md`；不支持自动加载的工具，把 `SKILL.md` 内容粘进对话也能用。
-
-<details>
-<summary>用通用安装器（可选）</summary>
-
-[vercel-labs/skills](https://github.com/vercel-labs/skills) 能自动识别当前 runtime 并放到正确目录：
-
-```bash
-npx skills add PixelPilot666/CV-Forge
-```
-</details>
-
-**唯一的系统前置**：一个 LaTeX 引擎（编译中文 PDF 用）。装一次：
-
-```bash
-brew install tectonic        # macOS
-apt install texlive-xetex    # Linux
-winget install tectonic      # Windows
-```
+> **注**：需全局安装一次 LaTeX 引擎以编译中文 PDF：
+> ```bash
+> brew install tectonic        # macOS
+> apt install texlive-xetex    # Linux
+> winget install tectonic      # Windows
+> ```
 
 ---
 
-## 怎么用
+## 使用指南
 
-**第一次**，给它旧简历、项目文档、源代码等资料，它帮你建一份可复用的素材库。
+### 1. 初始化素材库（仅一次）
 
-```
-> 这是我的简历 resume.pdf，帮我建素材库
-```
-
-**之后**，投哪个岗位就把 JD 丢给它（文本、链接、截图都行）：
+将旧简历、项目文档或笔记丢给它，建立可复用的全量事实库。
 
 ```
-> 根据这份 JD 帮我改简历：<粘贴 JD>
-> 投字节这个 Agent 岗，简历重点往 Agent 开发上靠
-> 这版太满了，压到一页
-...
+> 这是我的简历 resume.pdf 和开源文档，请提取并建立素材库。
 ```
 
-产出在 `output/` 里：可直接投的 `resume.pdf`、能手改的 `resume.tex`、还有一份**匹配报告**——告诉你这份简历覆盖了 JD 哪些要求、ATS 关键词命中多少、哪些是真实缺口。
+### 2. 对齐 JD 生成简历（日常投递）
 
-> 换岗位再投时，直接复用素材库，不用重新录入。
+输入目标职位描述，按需调整侧重点和篇幅。
+
+```
+> 根据这份 JD 重写简历：<粘贴 JD>
+> 投递后端基础架构岗，简历内容压到一页 PDF，突出工程优化。
+```
+
+### 3. 核心产出（`output/`）
+
+- 📄 **`resume.pdf`**：排版就绪、可直接投递的成品简历。
+- 📝 **`resume.tex`**：支持像素级二次修改的 LaTeX 源码。
+- 📊 **匹配度报告**：展示 JD 覆盖率、ATS 关键词命中情况及真实技能缺口。
 
 ---
 
 ## 许可证
 
-[MIT](./LICENSE) — 随便用，随便改。
+[MIT](./LICENSE)
