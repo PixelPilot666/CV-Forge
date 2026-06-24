@@ -79,12 +79,6 @@ def check(profile, tailor):
     return violations
 
 
-def _load_yaml(path):
-    import yaml
-    with open(path, encoding="utf-8") as f:
-        return yaml.safe_load(f)
-
-
 def _load_json(path):
     import json
     with open(path, encoding="utf-8") as f:
@@ -97,11 +91,14 @@ def main(argv=None):
     parser.add_argument("tailor", help="tailor.json")
     args = parser.parse_args(argv)
 
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from _deps import load_yaml
+
     try:
-        profile = _load_yaml(args.profile)
+        profile = load_yaml(args.profile)
         tailor = _load_json(args.tailor)
     except ImportError:
-        print("错误: 需要 PyYAML，请先 pip install -r requirements.txt", file=sys.stderr)
         return 2
     except FileNotFoundError as ex:
         print(f"错误: {ex}", file=sys.stderr)

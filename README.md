@@ -79,35 +79,52 @@ JD（文本 / 链接 / 截图）
 
 ---
 
-## 🚀 安装
+## 🚀 安装到你的 AI 编码工具
 
-### 1. 获取 skill
+只需把这个目录放到工具的 skill / 规则目录即可，**无需配置 Python 环境**——脚本会在需要时自动安装唯一的依赖（PyYAML）。
 
-```bash
-git clone <this-repo-url> jd-resume
-```
-把 `jd-resume/` 放到 Claude Code 能加载 skill 的位置（如 `~/.claude/skills/`），或直接在该目录中向 Claude 发起对话。
-
-### 2. 安装 LaTeX 引擎（v1 必需，用于编译中文 PDF）
-
-推荐 [**tectonic**](https://tectonic-typesetting.github.io/)：单二进制、按需下载宏包、跨平台。
+<details open>
+<summary><b>Claude Code（推荐）</b></summary>
 
 ```bash
-# macOS
-brew install tectonic
-# Debian / Ubuntu
-apt install texlive-xetex          # 或下载 tectonic release
-# Windows
-winget install tectonic            # 或 scoop install tectonic
+# 个人全局可用
+git clone <this-repo-url> ~/.claude/skills/jd-resume
+
+# 或仅在某个项目里可用
+git clone <this-repo-url> /path/to/project/.claude/skills/jd-resume
 ```
+Claude Code 会自动发现 `SKILL.md` 并按其 `description` 在合适时机触发；你也可以直接说"用 jd-resume 根据这份 JD 生成简历"。
+</details>
 
-> 也支持 TeX Live 自带的 `xelatex`。skill 运行时会自动探测引擎，缺失时给出对应系统的安装命令——**不会在缺引擎时静默降级**。
+<details>
+<summary><b>Codex / 其他读 AGENTS.md 或自定义规则的工具</b></summary>
 
-### 3. 安装 Python 依赖
+skill 的"大脑"是纯 Markdown 的 `SKILL.md` + `references/`，与具体工具无关。两种接入方式：
+
+1. 克隆到项目里，在你的规则文件（如 `AGENTS.md`、`.cursorrules`）中加一行指引：
+   > 涉及"根据 JD 生成/定制简历"时，请阅读并遵循 `jd-resume/SKILL.md` 的工作流。
+2. 或直接把 `jd-resume/SKILL.md` 的内容贴给模型作为系统提示。
+
+脚本是标准 Python 3 / shell，任何能执行命令的 agent 都能调用。
+</details>
+
+<details>
+<summary><b>不接入工具，纯手动用</b></summary>
+
+脚本可独立运行，见下方[使用](#-使用)中的命令示例。
+</details>
+
+### 唯一的系统前置：一个 LaTeX 引擎（用于编译中文 PDF）
+
+PDF 排版需要 XeLaTeX 引擎，这是系统级软件，需安装一次。推荐 [**tectonic**](https://tectonic-typesetting.github.io/)（单二进制、跨平台、按需下载宏包）：
 
 ```bash
-pip install -r requirements.txt    # 仅一个依赖：PyYAML
+brew install tectonic        # macOS
+apt install texlive-xetex    # Debian/Ubuntu（或下载 tectonic release）
+winget install tectonic      # Windows（或 scoop install tectonic）
 ```
+
+> skill 运行时会自动探测引擎；没装时它会停下来给你对应系统的安装命令，**不会静默降级**。Python 依赖（PyYAML）则完全自动，你无需手动 `pip install`。
 
 ---
 

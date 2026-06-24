@@ -189,13 +189,14 @@ def main(argv=None):
 
     profile = parse_tex(tex)
 
-    try:
-        import yaml
-    except ImportError:
-        print("错误: 需要 PyYAML，请先 pip install -r requirements.txt", file=sys.stderr)
-        return 2
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from _deps import dump_yaml
 
-    out = yaml.safe_dump(profile, allow_unicode=True, sort_keys=False)
+    try:
+        out = dump_yaml(profile)
+    except ImportError:
+        return 2
     if args.output:
         with open(args.output, "w", encoding="utf-8") as f:
             f.write(out)

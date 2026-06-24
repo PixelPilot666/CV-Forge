@@ -267,14 +267,14 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     import json
-    try:
-        import yaml
-    except ImportError:
-        print("错误: 需要 PyYAML，请先 pip install -r requirements.txt", file=sys.stderr)
-        return 2
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from _deps import load_yaml
 
-    with open(args.profile, encoding="utf-8") as f:
-        profile = yaml.safe_load(f)
+    try:
+        profile = load_yaml(args.profile)
+    except ImportError:
+        return 2
     with open(args.tailor, encoding="utf-8") as f:
         tailor = json.load(f)
     with open(args.template, encoding="utf-8") as f:

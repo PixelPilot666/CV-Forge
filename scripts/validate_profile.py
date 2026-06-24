@@ -120,22 +120,18 @@ def _check_unique(ids, label, errors):
         seen.add(i)
 
 
-def _load(path):
-    import yaml  # 延迟导入，便于在缺依赖时给清晰提示
-
-    with open(path, encoding="utf-8") as f:
-        return yaml.safe_load(f)
-
-
 def main(argv=None):
     parser = argparse.ArgumentParser(description="校验 master-profile schema")
     parser.add_argument("profile", help="master-profile.yaml 路径")
     args = parser.parse_args(argv)
 
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from _deps import load_yaml
+
     try:
-        profile = _load(args.profile)
+        profile = load_yaml(args.profile)
     except ImportError:
-        print("错误: 需要 PyYAML，请先 pip install -r requirements.txt", file=sys.stderr)
         return 2
     except FileNotFoundError:
         print(f"错误: 找不到文件 {args.profile}", file=sys.stderr)
