@@ -40,9 +40,9 @@ jd:
 用 `scripts/ats_check.py` 对**渲染后的简历纯文本**（PDF 抽取）做关键词命中检查 —— 这才是 ATS 实际读到的内容。脚本输出命中表（关键词 → ✅/❌）。
 
 ```bash
-python3 scripts/ats_check.py jd.txt output/<dir>/resume.pdf
+python3 "$SKILL/scripts/ats_check.py" jd.txt "$OUT/resume.pdf"
 # 或显式给关键词：
-python3 scripts/ats_check.py --keywords "Python,RAG,FastAPI" output/<dir>/resume.pdf
+python3 "$SKILL/scripts/ats_check.py" --keywords "Python,RAG,FastAPI" "$OUT/resume.pdf"
 ```
 
 ## 4. 匹配报告（match-report.md）结构

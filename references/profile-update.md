@@ -1,6 +1,6 @@
 # 更新素材库（增量维护 master-profile.yaml）
 
-素材库是长期资产，会随你的新经历不断增长。本文件定义如何**安全地增量更新** `data/master-profile.yaml`，覆盖四类场景：新增、合并、修改、删除/归档。
+素材库是长期资产，会随你的新经历不断增长。本文件定义如何**安全地增量更新** `~/.cv-forge/master-profile.yaml`，覆盖四类场景：新增、合并、修改、删除/归档。
 
 > 触发：用户说「我新做了个项目」「换实习了，更新经历」「这个数字重测了，改一下」「把某段隐藏掉」等，或丢来一份新文档要求并入素材库。
 
@@ -8,7 +8,7 @@
 
 1. **合并，不覆盖**：在现有 YAML 基础上增改，绝不重写整个文件丢掉历史条目。
 2. **稳定 id 不变**：已有条目/bullet 的 `id` 一律保持原样——简历裁剪、`tailor.json`、`check_fidelity` 都依赖它。新增条目才分配新 id。
-3. **改动前先读、后校验**：编辑前先读当前 profile；写完跑 `python3 scripts/validate_profile.py data/master-profile.yaml`，确认 id 唯一、必填字段齐全。
+3. **改动前先读、后校验**：编辑前先读当前 profile；写完跑 `python3 "$SKILL/scripts/validate_profile.py" ~/.cv-forge/master-profile.yaml`，确认 id 唯一、必填字段齐全。
 4. **真实性边界照旧**：只录入用户确认的真实信息，缺数字就追问（见 interview.md），绝不编造。
 5. **写前确认**：把要新增/修改/删除的内容摘要给用户，确认后再落盘。
 

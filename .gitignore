@@ -1,10 +1,12 @@
 # 用户真实素材库（含个人隐私 PII），绝不入库
+# v1 起素材库默认在 ~/.cv-forge/，不在仓库内；以下为兼容旧路径
 data/master-profile.yaml
 data/master-profile.yml
 data/master-profile.json
 
-# 生成产物
+# 生成产物（v1 起默认输出到用户工作目录的 cv-forge/）
 output/
+cv-forge/
 
 # LaTeX 中间产物
 *.aux

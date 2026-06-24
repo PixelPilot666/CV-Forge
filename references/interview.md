@@ -29,7 +29,7 @@
 
 ## 回写素材库
 
-用户确认的真实信息**写回 `data/master-profile.yaml`**（经用户确认）：
+用户确认的真实信息**写回 `~/.cv-forge/master-profile.yaml`**（经用户确认）：
 - 数字 → 写进对应 bullet 的 `metrics`（结构化）。
 - 新的真实经历/技能 → 新增条目或 skill，配 `evidence_refs`。
 - 这样素材库越用越完整，下次换 JD 直接复用。

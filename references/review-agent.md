@@ -15,7 +15,7 @@
 
 两个子 agent 的输入**只有**：
 - **目标 JD**（或通用岗位画像）原文；
-- **渲染后简历的纯文本**（`pdftotext output/<dir>/resume.pdf`）——它们看到的就是 HR / ATS 实际看到的内容；
+- **渲染后简历的纯文本**（`pdftotext $OUT/resume.pdf`）——它们看到的就是 HR / ATS 实际看到的内容；
 - 评审标准 `references/review-rubric.md`、`references/resume-craft.md`、真实性边界 `references/tailoring-rules.md`。
 
 **绝不**把 `tailor.json`、master profile、生成思路给评审子 agent——避免"我知道作者想强调什么"污染评分。对抗挑错员可额外拿到 master profile，仅用于核对"是否虚报/超出素材"（见下）。
