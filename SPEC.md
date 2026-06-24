@@ -1,4 +1,4 @@
-# SPEC — `jd-resume` Skill (v1)
+# SPEC — `CV-Forge` Skill (v1)
 
 > 一个开源的 Claude Code skill：根据职位描述（JD）从个人素材库生成定制化简历。
 > **本文件是 v1 的规格说明（spec-driven development 的设计交付物）。实现以此为准。**
@@ -49,7 +49,7 @@ v1 脚本以 **Python 为主 + 少量 shell**，stdlib 优先。
 ## 3. Project Structure（项目结构）
 
 ```
-jd-resume/
+CV-Forge/
 ├── SKILL.md                       # 触发用 frontmatter + 编排说明（简短，渐进式加载）
 ├── SPEC.md                        # 本文件
 ├── README.md                      # 简介、安装、快速开始、格式支持矩阵

@@ -1,10 +1,10 @@
 ---
-name: jd-resume
+name: cv-forge
 description: 根据职位描述（JD）从个人素材库生成定制化、真实、排版精美的中文简历 PDF，并附 JD 匹配分析报告。当用户要"根据 JD/职位描述生成简历""定制简历""按岗位改简历""做一份针对某职位的简历""resume tailored to a job description"时使用。v1 支持中文 + LaTeX→PDF。
 license: MIT
 ---
 
-# jd-resume
+# CV-Forge
 
 扮演**资深简历制作专家**，根据 JD 从素材库打磨出定制化中文简历（LaTeX→PDF），并附匹配分析与专家评审。
 
