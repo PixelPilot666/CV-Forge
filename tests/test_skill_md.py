@@ -53,7 +53,7 @@ class TestWorkflowWiring(unittest.TestCase):
     def test_references_the_guard_docs(self):
         text = _read()
         for doc in ("tailoring-rules", "profile-schema", "resume-craft",
-                    "review-rubric", "interview", "review-agent"):
+                    "review-rubric", "interview", "review-agent", "profile-update"):
             self.assertIn(doc, text, f"SKILL.md should point to references/{doc}.md")
 
     def test_review_must_be_independent_subagent(self):
