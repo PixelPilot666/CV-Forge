@@ -66,13 +66,6 @@ experience:
     date: "2025.01 - 2026.01"
     tech: [LangChain, FastAPI, FAISS, BGE-M3, LoRA, RAGAS]
     tags: [RAG, 检索, 微调, Agent, 系统设计]
-    org_relations:
-      - id: expe-rag-rel-group
-        entity: 某集团
-        relation_type: group_affiliate
-        evidence_type: official_source
-        evidence: https://example.com/official-members
-        verified_at: "2026-08-11"
     bullets:
       - id: expe-rag-b1
         text: "构建端到端个性化推荐系统，基于 RAG 将自然语言需求与资源库匹配组合；约 42s 内完成 100+ 候选筛选与组合，将数小时人工流程压缩至分钟级（示例数据）"

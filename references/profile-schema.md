@@ -42,6 +42,13 @@ experience:                 # 实习/工作经历
     date: "2025.01 - 2026.01" # 必填，时间段（字符串，保留原格式）
     tech: [LangChain, FastAPI, FAISS]   # 可选，技术栈
     tags: [RAG, 检索, 微调]   # 可选，语义标签，用于 JD 匹配
+    org_relations:            # 可选；公司展示旁注的唯一事实来源
+      - id: exp-acme-rel-group # 必填，稳定且全局唯一
+        entity: 某集团         # 纯实体名，不含括号或关系陈述
+        relation_type: group_affiliate # group_affiliate/subsidiary/parent_company/brand/product
+        evidence_type: official_source # 控制关系必须为 official_source
+        evidence: https://example.com/official-members
+        verified_at: "2026-08-11"
     bullets:
       - id: exp-acme-b1     # 必填，稳定 id
         text: 构建端到端个性化推荐系统……   # 必填，要点文本（纯文本，自动 LaTeX 转义）
@@ -96,6 +103,7 @@ preferences:                # 可选，不打印，仅指导裁剪
 - `experience` / `projects` / `research` / `education` 若存在，必须是列表；每个条目含**非空 `id`**。
 - 同类下 `id` 唯一；所有 bullet 的 `id` 在全局唯一。
 - 经历类条目含必填定位字段：`experience` 需 `org`+`date`（`title` 推荐）；`projects`/`research` 需 `name`；`education` 需 `school`+`date`。
+- `experience[].org_relations` 若存在必须为列表；每条含全局唯一 `id`、纯实体 `entity`、合法 `relation_type` / `evidence_type`、非空 `evidence` 与 `YYYY-MM-DD` 的 `verified_at`。集团归属、子公司和母公司等控制关系只接受 `official_source`。
 
 **软提醒（不报错，仅列出 warning）：**
 - 某 `skills.items[].name` 没有 `evidence_refs` → 提醒"此技能未关联证据，请确认属实"。
@@ -107,3 +115,4 @@ preferences:                # 可选，不打印，仅指导裁剪
 - **稳定 id 是裁剪的支点**：按 JD 定制 = 选择/重排/润色这些 id 对应的内容，**绝不新增 id**。
 - **`metrics` 结构化**：把真实数字单独存，"合理补强"= 把已有真实数字前置/突出，而非编造新数字。
 - **`evidence_refs` 软约束**：技能的可信度可追溯；缺了不阻断，但会在匹配报告里标注，把判断权交回用户。
+- **`org_relations` 是旁注事实源**：tailor 仅通过 `org_note_ref` 引用，避免在改写层自由拼接公司关系。

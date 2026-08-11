@@ -1,0 +1,8 @@
+{
+  "scores": {"role_focus": 3, "evidence": 4, "ownership": 3, "credibility": 4, "impact": 4, "clarity": 5},
+  "total": 23,
+  "improvements": [
+    {"text": "把 Agent 工作流证据置顶，使其直接回应岗位使命", "category": "actionable", "axis": "role_focus"},
+    {"text": "技术栈行混入了项目名「多Agent选课推荐系统」，应删除", "category": "actionable", "axis": "clarity"}
+  ]
+}

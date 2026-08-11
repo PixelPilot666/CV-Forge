@@ -1,0 +1,22 @@
+{
+  "fixture": "generic-agent-role",
+  "mission": "为开发者构建可调试、可评测并能持续迭代的 Agent 工作流与开发者工具",
+  "top_requirements": [
+    {
+      "requirement": "Agent 工作流、工具调用与状态编排",
+      "evidence_refs": ["proj-course-agent-b2"],
+      "gap": null
+    },
+    {
+      "requirement": "Python 服务端工程与完整交付",
+      "evidence_refs": ["expe-rag-b1", "proj-course-agent-b1"],
+      "gap": null
+    },
+    {
+      "requirement": "调试、评测与失败恢复能力",
+      "evidence_refs": ["expe-rag-b3", "expe-rag-b4"],
+      "gap": "现有素材没有直接的开发者调试体验或故障恢复结果"
+    }
+  ],
+  "supporting_evidence": ["RAG", "混合检索", "LangGraph", "FastAPI"]
+}

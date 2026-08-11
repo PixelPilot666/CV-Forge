@@ -1,0 +1,88 @@
+{
+  "skill_name": "cv-forge",
+  "_note": "评测用固定 fixture，绝不读写用户真实的 ~/.cv-forge。运行时把 evals/files/eval-master-profile.yaml 当作素材库（可设 CV_FORGE_HOME 或显式传路径），产物写到临时/沙箱目录。assertions 多数可由仓库脚本(check_fidelity.py / ats_check.py / validate_profile.py)或对 PDF 数页/查产物自动判定。",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "这是我的素材库 eval-master-profile.yaml。根据下面这份后端/基础架构岗的 JD 给我做一份针对性的中文简历，压到一页 PDF，突出工程与性能：\n\n<见 evals/files/backend-infra-jd.txt>",
+      "expected_output": "在沙箱产物目录生成 resume.pdf(1 页) + resume.tex + tailor.json + match-report.md；按后端/架构岗重排强调工程与性能；公司/岗位/时间/论文名/项目名与素材库一字不差；不编造素材库里没有的经历/数字/技能；ATS 关键词有合理命中。",
+      "files": ["evals/files/eval-master-profile.yaml", "evals/files/backend-infra-jd.txt"],
+      "expectations": [
+        "产物目录下生成了 resume.pdf、resume.tex、tailor.json、match-report.md 四个文件",
+        "resume.pdf 正好 1 页（pdfinfo 显示 Pages: 1）",
+        "check_fidelity.py 对生成的 tailor.json 校验通过（关键字段与素材库一字不差，退出码 0）",
+        "tailor.json 里每个 bullet_id 都能在素材库 eval-master-profile.yaml 中找到（无凭空新增的 id）",
+        "简历未出现素材库中不存在的公司/岗位/学历/数字（无编造）",
+        "match-report.md 含覆盖表 / ATS 命中 / 缺口清单 / 补强审计",
+        "ats_check.py 对 JD 与生成简历的关键词命中数 ≥ 8（注意：不能要求满命中，否则等于逼简历去编造素材库里没有的关键词如 Linux，违背真实性边界）",
+        "产物目录总体积 < 5MB（未把 ~43MB 字体复制进产物目录）"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "我新做了个项目想加进素材库：『实时风控规则引擎』，独立开发，用 Go + Redis 实现，把规则评估的 P99 延迟从 120ms 降到 30ms。帮我并进素材库。",
+      "expected_output": "走『维护素材库』独立路径（无需 JD）：在素材库的 projects 下增量新增一个条目，分配唯一稳定 id，保留已有条目与 id 不变；改动后 validate_profile.py 通过；新数字来自用户所述、未自行编造。",
+      "files": ["evals/files/eval-master-profile.yaml"],
+      "expectations": [
+        "把新项目作为一个新条目增量并入素材库的 projects（合并而非覆盖整个文件）",
+        "素材库中原有的 expe-rag / proj-course-agent / pub-1 等条目及其 id 原样保留",
+        "新条目分配了唯一且稳定的 id，且与已有 id 不冲突",
+        "validate_profile.py 对更新后的素材库校验通过（退出码 0）",
+        "新条目只包含用户提供的事实（Go / Redis / P99 120ms→30ms），未额外编造指标或技术",
+        "未在未提供 JD 的情况下擅自生成简历 PDF（这是素材库维护动作）"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "帮我把这份英文 JD 做成一份英文简历投美国岗位：Senior Backend Engineer at a fintech startup, requires Go, gRPC, Kubernetes, 5+ years experience.",
+      "expected_output": "v1 仅产出中文简历。应向用户说明该范围限制并请其确认（是否改投中文简历 / 等后续版本），而不是默默产出一份不符合预期的英文或中文简历。",
+      "files": [],
+      "expectations": [
+        "明确说明 v1 仅支持中文简历（LaTeX→PDF），不静默产出英文简历",
+        "向用户澄清下一步（例如改做中文版，或说明英文/双语属后续迭代）后再继续，而非直接生成",
+        "没有编造一段与用户素材库无关的经历来凑英文简历"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "基于同一份 eval-master-profile.yaml，分别做一份通用 Agent/RAG 简历和一份搜索/推荐算法通用简历。两份都要突出‘问题→方法→结果’，保留为两个独立版本，不要互相覆盖。",
+      "expected_output": "生成两个独立的一页中文 PDF 版本及各自的 resume.tex、tailor.json、match-report.md；Agent/RAG 版优先 Agent 工作流、编排、约束和评测，搜索/推荐版优先查询、召回、融合、排序和离线指标；素材库无 CTR/CVR、竞价、归因或线上 A/B 证据，因此不得命名或包装为广告算法经历。",
+      "files": ["evals/files/eval-master-profile.yaml"],
+      "expectations": [
+        "两个岗位族使用独立输出目录，已有版本和 tailor.json 均未被覆盖",
+        "两份 resume.pdf 均为一页，且 check_fidelity.py 对各自 tailor.json 校验通过",
+        "核心 bullet 自然呈现问题、方法和结果，不机械添加三个标签或让每条都使用相同句式",
+        "Agent/RAG 版把 Agent 工作流、状态/校验或评测证据放在检索细节之前",
+        "搜索/推荐版把查询理解、召回、融合、排序和 P@K 等离线证据放在 Agent 编排之前",
+        "未添加素材库不存在的 CTR/CVR、双塔、广告竞价、归因或线上 A/B 经历",
+        "页面视觉检查无公司名与日期重叠、无截断，字体和加粗层级一致"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "目标 JD 的品牌与我素材库中的当前实习公司属于同一集团体系。先帮我做针对性简历。",
+      "expected_output": "在生成前主动询问这是回归测试、内部转岗、重复投递还是需要规避同公司歧义；不得自行删除当前经历，也不得把品牌或集团名改写成法定雇主。",
+      "files": ["evals/files/eval-master-profile.yaml"],
+      "expectations": [
+        "识别目标品牌与当前/过往雇主可能存在公司别名或关联品牌关系",
+        "生成前主动询问具体用途，并允许用户确认回归测试后继续",
+        "未擅自删除相关实习经历",
+        "未用集团或品牌名替换素材库中的公司法定主体"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "请把素材库里的 RAG 实习改写成更有冲击力的通用 Agent 简历：可以重组问题—方法—结果，但不要新增事实；公司标题想加『某集团旗下』旁注。",
+      "expected_output": "生成 schema_version=2 的 tailor.json：intro 与每条 override 有同条目来源审计，改写未新增来源中不存在的数字；公司法定主体保持原样，关系先经确认写入 profile.org_relations，tailor 只用 org_note_ref 引用；check_fidelity.py 校验通过。",
+      "files": ["evals/files/eval-master-profile.yaml"],
+      "expectations": [
+        "tailor.json 使用 schema_version=2",
+        "每个非空 intro 都有 intro_source_ids，且只引用当前 profile 条目或其 bullet",
+        "每条 bullet_overrides 都有 override_audit，包含 source_ids、change_type 和 claim_notes",
+        "改写中的数字均能在声明的 source_ids 中找到，check_fidelity.py 校验通过",
+        "公司法定主体在 heading 中原样保留",
+        "公司关系事实保存在 profile.org_relations 并有稳定 id；tailor 禁止内联 org_note，只能用 org_note_ref 引用；『旗下/子公司/母公司』关系还要求 official_source，否则主动要求证据或省略旁注"
+      ]
+    }
+  ]
+}

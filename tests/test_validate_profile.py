@@ -26,6 +26,11 @@ def _valid_profile():
         ],
         "experience": [
             {"id": "exp-a", "org": "公司A", "title": "工程师", "date": "2025.01 - 2026.01",
+             "org_relations": [
+                 {"id": "exp-a-rel-brand", "entity": "Brand A",
+                  "relation_type": "brand", "evidence_type": "user_confirmation",
+                  "evidence": "用户确认", "verified_at": "2026-08-11"}
+             ],
              "bullets": [{"id": "exp-a-b1", "text": "做了事"}]},
         ],
         "education": [
@@ -87,6 +92,28 @@ class TestValidateProfile(unittest.TestCase):
         p["experience"][0]["bullets"].append({"id": "exp-a-b1", "text": "重复 bullet id"})
         errors, _ = vp.validate(p)
         self.assertTrue(any("exp-a-b1" in e for e in errors))
+
+    def test_control_org_relation_requires_official_source(self):
+        p = _valid_profile()
+        p["experience"][0]["org_relations"][0].update({
+            "relation_type": "group_affiliate",
+            "evidence_type": "user_confirmation",
+        })
+        errors, _ = vp.validate(p)
+        self.assertTrue(any("official_source" in e for e in errors))
+
+    def test_org_relation_id_must_be_unique(self):
+        p = _valid_profile()
+        p["experience"][0]["org_relations"].append(
+            dict(p["experience"][0]["org_relations"][0]))
+        errors, _ = vp.validate(p)
+        self.assertTrue(any("org_relation id" in e and "重复" in e for e in errors))
+
+    def test_org_relation_entity_rejects_relationship_sentence(self):
+        p = _valid_profile()
+        p["experience"][0]["org_relations"][0]["entity"] = "Demo 由某集团所有"
+        errors, _ = vp.validate(p)
+        self.assertTrue(any("纯实体名称" in e for e in errors))
 
 
 if __name__ == "__main__":

@@ -75,25 +75,21 @@ class TestEndToEnd(unittest.TestCase):
 
     @unittest.skipUnless(_engine_available(), "no LaTeX engine")
     def test_compiles_to_pdf(self):
+        # build_resume.sh stages assets in a temp dir and returns only the PDF, so the
+        # output dir stays lean. We just point it at the template dir + our rendered tex.
         with tempfile.TemporaryDirectory() as d:
-            # stage template assets + tex
-            src = os.path.join(ROOT, "assets", "templates", "zh-classic")
-            for name in os.listdir(src):
-                s = os.path.join(src, name)
-                dst = os.path.join(d, name)
-                if os.path.isdir(s):
-                    shutil.copytree(s, dst)
-                else:
-                    shutil.copy(s, dst)
             tex_path = os.path.join(d, "resume.tex")
             with open(tex_path, "w", encoding="utf-8") as f:
                 f.write(self.tex)
+            src = os.path.join(ROOT, "assets", "templates", "zh-classic")
             proc = subprocess.run(
-                ["/bin/bash", os.path.join(ROOT, "scripts", "render_pdf.sh"),
-                 tex_path, "-o", d],
+                ["/bin/bash", os.path.join(ROOT, "scripts", "build_resume.sh"),
+                 tex_path, "-t", src, "-o", d],
                 capture_output=True, text=True)
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
             self.assertTrue(os.path.isfile(os.path.join(d, "resume.pdf")))
+            # fonts must not have been copied into the output dir
+            self.assertNotIn("fonts", os.listdir(d))
 
 
 if __name__ == "__main__":

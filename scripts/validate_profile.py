@@ -10,6 +10,8 @@ schema 定义见 references/profile-schema.md。
 import argparse
 import sys
 
+from _org_relation import validation_errors as org_relation_errors
+
 # 经历类 section -> 每个条目必填的定位字段
 # (title 对 experience 推荐但不强制: 抽取/手填时常与 org 合在一行)
 SECTION_REQUIRED_FIELDS = {
@@ -44,6 +46,7 @@ def validate(profile):
     # --- 经历类 sections: 列表 + 条目 id + 必填字段 ---
     all_entry_ids = []
     all_bullet_ids = []
+    all_org_relation_ids = []
     for section in ENTRY_SECTIONS:
         if section not in profile:
             continue
@@ -66,6 +69,18 @@ def validate(profile):
                     errors.append(
                         f"{section}[{idx}] (id={entry.get('id', '?')}) 缺少必填字段 {req}"
                     )
+            if section == "experience":
+                relations = entry.get("org_relations", []) or []
+                if not isinstance(relations, list):
+                    errors.append(f"experience[{idx}].org_relations 必须是列表")
+                    relations = []
+                for ridx, relation in enumerate(relations):
+                    relation_id = relation.get("id") if isinstance(relation, dict) else None
+                    if relation_id:
+                        all_org_relation_ids.append(relation_id)
+                    prefix = f"experience[{idx}].org_relations[{ridx}]"
+                    for error in org_relation_errors(relation):
+                        errors.append(f"{prefix} {error}")
             for bidx, bullet in enumerate(entry.get("bullets", []) or []):
                 if not isinstance(bullet, dict):
                     errors.append(f"{section}[{idx}].bullets[{bidx}] 必须是映射(dict)")
@@ -85,6 +100,7 @@ def validate(profile):
     # --- id 全局唯一(条目与 bullet 各自空间, 但合并检查避免交叉混淆) ---
     _check_unique(all_entry_ids, "条目 id", errors)
     _check_unique(all_bullet_ids, "bullet id", errors)
+    _check_unique(all_org_relation_ids, "org_relation id", errors)
     known_ids = set(all_entry_ids) | set(all_bullet_ids)
 
     # --- skills (软提醒) ---

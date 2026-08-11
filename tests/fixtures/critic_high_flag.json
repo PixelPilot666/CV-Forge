@@ -1,0 +1,6 @@
+{
+  "red_flags": [
+    {"issue": "「提出全图前向训练机制」夸大原创性，实为复现论文方法", "severity": "high", "fix": "改为「复现」或删除", "category": "actionable", "axis": "credibility", "needs_new_fact": false}
+  ],
+  "checked": ["虚报", "指标口径", "Demo 包装", "组件清单", "个人贡献", "可追溯"]
+}

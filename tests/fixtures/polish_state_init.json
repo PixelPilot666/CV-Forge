@@ -1,0 +1,31 @@
+{
+  "schema": "cv-forge/polish-state@1",
+  "round": 0,
+  "max_rounds": 1,
+  "page_target": 1,
+  "density_warning_band": [0.75, 0.98],
+  "cal": 0, "max_cal": 2,
+  "fidelity_fix": 0, "max_fidelity_fix": 2,
+  "build_retry": 0, "max_build_retry": 1,
+  "last_pages": null,
+  "last_fill_ratio": null,
+  "last_density_warning": null,
+  "last_dir": "none",
+  "last_score": null,
+  "last_high_flags": null,
+  "last_review_round": null,
+  "has_actionable": null,
+  "best": {
+    "round": null, "score": null, "pages": null, "fill_ratio": null,
+    "high_flags": null, "med_flags": null, "page_ok": null,
+    "tex_path": "resume.tex", "pdf_path": "resume.pdf", "tailor_path": "tailor.json"
+  },
+  "selected": null,
+  "history": [],
+  "needs_fact": [],
+  "unfixed_actionable": [],
+  "terminated": false,
+  "deliverable": null,
+  "decision": null,
+  "delivery_reason": null
+}

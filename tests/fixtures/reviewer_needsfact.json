@@ -1,0 +1,8 @@
+{
+  "scores": {"role_focus": 4, "evidence": 3, "ownership": 3, "credibility": 3, "impact": 4, "clarity": 5},
+  "total": 22,
+  "improvements": [
+    {"text": "proj-course-agent 的结果缺少可核实证据", "category": "needs-fact", "axis": "evidence"},
+    {"text": "JD 要求的 Kubernetes 经验在 profile 中无证据", "category": "needs-fact", "axis": "role_focus"}
+  ]
+}

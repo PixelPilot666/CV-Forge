@@ -1,0 +1,94 @@
+{
+  "schema_version": 2,
+  "company": "示例目标公司",
+  "role": "Agent 开发实习生",
+  "_note": "脱敏回归用例。岗位主线是 Agent 工作流与开发者工具，RAG 只作为工程证据；核心 bullet 采用问题—方法—结果，所有内容均来自 sample master profile。",
+  "sections": [
+    {
+      "title": "教育经历",
+      "entries": [
+        {
+          "ref": "edu-grad",
+          "heading": "\\textbf{某重点大学（985），计算机技术，硕士}",
+          "date": "2024.09 - 2027.06",
+          "bullet_ids": ["edu-grad-b1"]
+        }
+      ]
+    },
+    {
+      "title": "实习经历",
+      "entries": [
+        {
+          "ref": "expe-rag",
+          "heading": "\\textbf{Agent 工程师} \\hfill \\textbf{某科技有限公司}",
+          "date": "2025.01 - 2026.01",
+          "intro": "负责需求理解、检索与生成链路的工程实现，围绕约束满足和效果评测交付推荐能力。",
+          "intro_source_ids": ["expe-rag", "expe-rag-b1", "expe-rag-b2", "expe-rag-b4"],
+          "bullet_ids": ["expe-rag-b1", "expe-rag-b2", "expe-rag-b3"],
+          "bullet_overrides": {
+            "expe-rag-b1": "为解决人工推荐耗时长的问题，构建基于 RAG 的个性化推荐链路，将自然语言需求映射到资源组合，约 42s 完成 100+ 候选筛选，将数小时人工流程压缩至分钟级（示例数据）",
+            "expe-rag-b2": "面对复杂属性约束下单路召回不足的问题，采用 BGE-M3、FAISS 与 RRF 实现语义召回和用户画像排序，保留可解释的过滤与排序依据",
+            "expe-rag-b3": "为提升相似候选区分能力，基于难负例微调 BGE-M3 并建立 P@1 对照评测，将示例指标从 85% 提升至 95%"
+          },
+          "override_audit": {
+            "expe-rag-b1": {
+              "source_ids": ["expe-rag-b1"],
+              "change_type": "reframe",
+              "claim_notes": "改为问题—方法—结果结构；耗时、候选规模和流程压缩均来自原 bullet"
+            },
+            "expe-rag-b2": {
+              "source_ids": ["expe-rag-b2"],
+              "change_type": "reframe",
+              "claim_notes": "只重组检索问题、方法和可解释性结果"
+            },
+            "expe-rag-b3": {
+              "source_ids": ["expe-rag-b3"],
+              "change_type": "reframe",
+              "claim_notes": "P@1 基线与结果原样保留"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "项目经历",
+      "entries": [
+        {
+          "ref": "proj-course-agent",
+          "heading": "\\textbf{多 Agent 选课推荐系统}（独立项目）",
+          "date": "",
+          "intro": "独立完成面向教务场景的 Agent 工作流原型，用于验证自然语言偏好到课程推荐的编排方案。",
+          "intro_source_ids": ["proj-course-agent", "proj-course-agent-b1", "proj-course-agent-b2"],
+          "bullet_ids": ["proj-course-agent-b2", "proj-course-agent-b3"],
+          "bullet_overrides": {
+            "proj-course-agent-b2": "为解决串行链路难定位失败阶段的问题，在独立项目中采用 LangGraph 实现 Supervisor Agent 工作流，将画像、召回、重排、校验与解释拆成可独立检查和降级的阶段",
+            "proj-course-agent-b3": "面对重复请求带来的检索开销，构建 MySQL 与 Milvus 数据层并采用 Redis 缓存候选集合，为工作流提供可复用的课程检索结果"
+          },
+          "override_audit": {
+            "proj-course-agent-b2": {
+              "source_ids": ["proj-course-agent-b2"],
+              "change_type": "reframe",
+              "claim_notes": "只明确问题背景和独立项目边界"
+            },
+            "proj-course-agent-b3": {
+              "source_ids": ["proj-course-agent-b3"],
+              "change_type": "reframe",
+              "claim_notes": "只明确缓存解决的重复检索问题"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "科研经历",
+      "entries": [
+        {
+          "ref": "pub-1",
+          "heading": "\\textbf{Sample Paper Title on Efficient High-Resolution Recognition}",
+          "date": "",
+          "bullet_ids": ["pub-1-b1"]
+        }
+      ]
+    }
+  ]
+}
